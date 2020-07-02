@@ -1,0 +1,65 @@
+# ASP.NET Core
+# Build and test ASP.NET Core projects targeting .NET Core.
+# Add steps that run tests, create a NuGet package, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/dotnet-core
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  buildConfiguration: 'Release'
+
+steps:
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '3.1.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore Nuget packages'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+    feedsToUse: 'select'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(BuildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish'
+  inputs:
+    command: publish
+    publishWebProjects: True
+    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    zipAfterPublish: True
+
+- task: SSH@0
+  displayName: 'Stop service'
+  inputs:
+    sshEndpoint: 'API STG'
+    commands: 'sudo service SER-Staging stop'
+
+- task: CopyFilesOverSSH@0
+  displayName: 'Copy publish files to server'
+  inputs:
+    sshEndpoint: 'API STG'
+    sourceFolder: '$(Build.ArtifactStagingDirectory)'
+    contents: '**'
+    targetFolder: '/opt/SER-Staging'
+    cleanTargetFolder: true
+
+- task: SSH@0
+  displayName: 'Unzip && Clean'
+  inputs:
+    sshEndpoint: 'API STG'
+    commands: 'unzip /opt/SER-Staging/s.zip -d /opt/SER-Staging && rm /opt/SER-Staging/s.zip'
+
+- task: SSH@0
+  displayName: 'Start service'
+  inputs:
+    sshEndpoint: 'API STG'
+    commands: 'sudo service SER-Staging start'

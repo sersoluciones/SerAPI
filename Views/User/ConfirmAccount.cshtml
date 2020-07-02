@@ -1,0 +1,38 @@
+<table class="main" style="background-color: #f7f7f7;width: 100%;font-family: Roboto,RobotoDraft,Helvetica,Arial,sans-serif;font-size: 13px;">
+    <tbody>
+        <tr>
+            <td></td>
+            <td class="content" style="background-color: white;max-width: 580px;display: block;width: 580px;border-radius: 8px;text-align: left;margin: 32px auto !important;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td class="logo" style="padding: 12px;">
+                            <img src="@(Configuration.GetSection("S3Bucket").Value)assets/images/logo.jpg" alt="SER" style="width: 84px;display: block;margin: 0 0 0 auto !important;">
+                        </td>
+                    </tr>
+                </table>
+                <div class="message" style="padding: 24px;">
+                    <div class="name" style="font-size: 20px;margin-bottom: 32px;">@__["hi_name", @Model.FirstName]</div>
+
+                    Por favor confirma tu cuenta dando click al siguiente link:
+                </div>
+                <a class="call-action" href="@Model.Href" target="_blank" style="height: 38px;padding: 0 20px;color: white;background-image: none;font-size: .71429rem;font-weight: 600;line-height: 38px;letter-spacing: 1px;text-transform: uppercase;text-decoration: none;white-space: nowrap;border-radius: 24px;background-color: #1f70ef;margin: 0 auto;border: none;cursor: pointer;outline: 0;user-select: none;box-sizing: border-box;max-width: 100%;display: block;width: 250px;text-align: center;">Confirmar</a>
+
+            </td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td class="footer" style="background-color: transparent;max-width: 580px;display: block;width: 580px;border-radius: 8px;text-align: center;margin: 0 auto 32px !important;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="font-size: 10px;color: #666666;text-align: center;">@__["not_reply_ses"]</td>
+                    </tr>
+                    <tr>
+                        <td style="font-size: 10px;color: #666666;text-align: center;">© @DateTime.Now.ToString("yyyy") <a href="@__["company_website"]" target="_blank">@__["company_name"]</a>, @__["company_address"]</td>
+                    </tr>
+                </table>
+            </td>
+            <td></td>
+        </tr>
+    </tbody>
+</table>

@@ -1,0 +1,1365 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+	<!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+	<xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+		<xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+		<xsd:element name="root" msdata:IsDataSet="true">
+			<xsd:complexType>
+				<xsd:choice maxOccurs="unbounded">
+					<xsd:element name="metadata">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" />
+							</xsd:sequence>
+							<xsd:attribute name="name" use="required" type="xsd:string" />
+							<xsd:attribute name="type" type="xsd:string" />
+							<xsd:attribute name="mimetype" type="xsd:string" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="assembly">
+						<xsd:complexType>
+							<xsd:attribute name="alias" type="xsd:string" />
+							<xsd:attribute name="name" type="xsd:string" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="data">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+								<xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+							<xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+							<xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+							<xsd:attribute ref="xml:space" />
+						</xsd:complexType>
+					</xsd:element>
+					<xsd:element name="resheader">
+						<xsd:complexType>
+							<xsd:sequence>
+								<xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+							</xsd:sequence>
+							<xsd:attribute name="name" type="xsd:string" use="required" />
+						</xsd:complexType>
+					</xsd:element>
+				</xsd:choice>
+			</xsd:complexType>
+		</xsd:element>
+	</xsd:schema>
+	<resheader name="resmimetype">
+		<value>text/microsoft-resx</value>
+	</resheader>
+	<resheader name="version">
+		<value>2.0</value>
+	</resheader>
+	<resheader name="reader">
+		<value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<resheader name="writer">
+		<value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+	</resheader>
+	<data name="checking" xml:space="preserve">
+    <value>Verificando</value>
+  </data>
+	<data name="correct" xml:space="preserve">
+    <value>Correcto</value>
+  </data>
+	<data name="loading" xml:space="preserve">
+    <value>Cargando</value>
+  </data>
+	<data name="login" xml:space="preserve">
+    <value>Iniciar Sesión</value>
+  </data>
+	<data name="password" xml:space="preserve">
+    <value>Contraseña</value>
+  </data>
+	<data name="remindme" xml:space="preserve">
+    <value>Recordarme</value>
+  </data>
+	<data name="user" xml:space="preserve">
+    <value>Usuario</value>
+  </data>
+	<data name="logout" xml:space="preserve">
+		<value>Cerrar sesión</value>
+	</data>
+	<data name="hi" xml:space="preserve">
+		<value>Hola</value>
+	</data>
+	<data name="theme_dark_light" xml:space="preserve">
+		<value>Tema oscuro/claro</value>
+	</data>
+	<data name="closing_session" xml:space="preserve">
+		<value>Cerrando sesión</value>
+	</data>
+	<data name="list" xml:space="preserve">
+		<value>Lista</value>
+	</data>
+	<data name="create" xml:space="preserve">
+		<value>Crear</value>
+	</data>
+	<data name="users" xml:space="preserve">
+		<value>Usuarios</value>
+	</data>
+	<data name="references" xml:space="preserve">
+		<value>Referencias</value>
+	</data>
+	<data name="reference" xml:space="preserve">
+		<value>Referencia</value>
+	</data>
+	<data name="welcome" xml:space="preserve">
+		<value>Bienvenido</value>
+	</data>
+	<data name="synchronize" xml:space="preserve">
+		<value>Sincronizar</value>
+	</data>
+	<data name="download" xml:space="preserve">
+		<value>Descargar</value>
+	</data>
+	<data name="search" xml:space="preserve">
+		<value>Buscar</value>
+	</data>
+	<data name="search_in_list" xml:space="preserve">
+		<value>Buscar en la lista</value>
+	</data>
+	<data name="update_list" xml:space="preserve">
+		<value>Actualizar lista</value>
+	</data>
+	<data name="my_account" xml:space="preserve">
+		<value>Mi cuenta</value>
+	</data>
+	<data name="configuration" xml:space="preserve">
+		<value>Configuración</value>
+	</data>
+	<data name="delete" xml:space="preserve">
+		<value>Eliminar</value>
+	</data>
+	<data name="edit" xml:space="preserve">
+		<value>Editar</value>
+	</data>
+	<data name="no_image_available.svg" xml:space="preserve">
+		<value>image_no_disponible.svg</value>
+	</data>
+	<data name="open_search_tools" xml:space="preserve">
+		<value>Abrir herramientas de busqueda</value>
+	</data>
+	<data name="name" xml:space="preserve">
+		<value>Nombre</value>
+	</data>
+	<data name="basic_data" xml:space="preserve">
+		<value>Datos básicos</value>
+	</data>
+	<data name="cancel" xml:space="preserve">
+		<value>Cancelar</value>
+	</data>
+	<data name="update" xml:space="preserve">
+		<value>Actualizar</value>
+	</data>
+	<data name="save" xml:space="preserve">
+		<value>Guardar</value>
+	</data>
+	<data name="select" xml:space="preserve">
+		<value>Seleccionar</value>
+	</data>
+	<data name="required" xml:space="preserve">
+		<value>Requerido</value>
+	</data>
+	<data name="max_size_allowed" xml:space="preserve">
+		<value>Tamaño máximo permitido</value>
+	</data>
+	<data name="delete_file" xml:space="preserve">
+		<value>Eliminar archivo</value>
+	</data>
+	<data name="only_allowed_images" xml:space="preserve">
+		<value>Solo se permiten imagenes en formato</value>
+	</data>
+	<data name="additional_data" xml:space="preserve">
+		<value>Datos adicionales</value>
+	</data>
+	<data name="back" xml:space="preserve">
+		<value>Atras</value>
+	</data>
+	<data name="complete_additional_data" xml:space="preserve">
+		<value>Completa la siguiente información adicional</value>
+	</data>
+	<data name="only_positive_number" xml:space="preserve">
+		<value>Solo se permiten valores positivos</value>
+	</data>
+	<data name="remove_from_list" xml:space="preserve">
+		<value>Remover de la lista</value>
+	</data>
+	<data name="send" xml:space="preserve">
+		<value>Enviar</value>
+	</data>
+	<data name="level" xml:space="preserve">
+		<value>Nivel</value>
+	</data>
+	<data name="quantity" xml:space="preserve">
+		<value>Cantidad</value>
+	</data>
+	<data name="delete_alert" xml:space="preserve">
+		<value>¿Desea eliminar el siguiente elemento(s)?</value>
+	</data>
+	<data name="delete_ok" xml:space="preserve">
+		<value>Eliminado exitosamente</value>
+	</data>
+	<data name="close" xml:space="preserve">
+		<value>Cerrar</value>
+	</data>
+	<data name="code" xml:space="preserve">
+		<value>Código</value>
+	</data>
+	<data name="general_data" xml:space="preserve">
+		<value>Datos generales</value>
+	</data>
+	<data name="yes" xml:space="preserve">
+		<value>Si</value>
+	</data>
+	<data name="no" xml:space="preserve">
+		<value>No</value>
+	</data>
+	<data name="color" xml:space="preserve">
+		<value>Color</value>
+	</data>
+	<data name="observations" xml:space="preserve">
+		<value>Observaciones</value>
+	</data>
+	<data name="version" xml:space="preserve">
+		<value>Versión</value>
+	</data>
+	<data name="versions" xml:space="preserve">
+		<value>Versiones</value>
+	</data>
+	<data name="confirm" xml:space="preserve">
+		<value>Confirmar</value>
+	</data>
+	<data name="summary" xml:space="preserve">
+		<value>Resumen</value>
+	</data>
+	<data name="total" xml:space="preserve">
+		<value>Total</value>
+	</data>
+	<data name="file" xml:space="preserve">
+		<value>Archivo</value>
+	</data>
+	<data name="username" xml:space="preserve">
+		<value>Nombre de usuario</value>
+	</data>
+	<data name="last_name" xml:space="preserve">
+		<value>Apellidos</value>
+	</data>
+	<data name="email" xml:space="preserve">
+		<value>Correo electrónico</value>
+	</data>
+	<data name="password_confirmation" xml:space="preserve">
+		<value>Confirmación de contraseña</value>
+	</data>
+	<data name="password_match_error" xml:space="preserve">
+		<value>Las contraseñas no coinciden</value>
+	</data>
+	<data name="email_error" xml:space="preserve">
+		<value>Correo electrónico incorrecto</value>
+	</data>
+	<data name="password_pattern_error" xml:space="preserve">
+		<value>La contraseña debe tener letras en mayusculas (A-Z), minusculas (a-z), números (0-9) y mínimo 6 caracteres de longitud</value>
+	</data>
+	<data name="access_data" xml:space="preserve">
+		<value>Datos de acceso</value>
+	</data>
+	<data name="phone" xml:space="preserve">
+		<value>Teléfono</value>
+	</data>
+	<data name="customer" xml:space="preserve">
+		<value>Cliente</value>
+	</data>
+	<data name="customers" xml:space="preserve">
+		<value>Clientes</value>
+	</data>
+	<data name="rol" xml:space="preserve">
+		<value>Rol</value>
+	</data>
+	<data name="roles" xml:space="preserve">
+		<value>Roles</value>
+	</data>
+	<data name="platform" xml:space="preserve">
+		<value>Plataforma</value>
+	</data>
+	<data name="create_success" xml:space="preserve">
+		<value>Creado exitosamente</value>
+	</data>
+	<data name="update_success" xml:space="preserve">
+		<value>Actualizado exitosamente</value>
+	</data>
+	<data name="search_for_code" xml:space="preserve">
+		<value>Buscar por código</value>
+	</data>
+	<data name="no_results" xml:space="preserve">
+		<value>Sin resultados</value>
+	</data>
+	<data name="error_403" xml:space="preserve">
+		<value>No tienes permiso para realizar esta acción</value>
+	</data>
+	<data name="security" xml:space="preserve">
+		<value>Seguridad</value>
+	</data>
+	<data name="administration" xml:space="preserve">
+		<value>Administración</value>
+	</data>
+	<data name="permissions" xml:space="preserve">
+		<value>Permisos</value>
+	</data>
+	<data name="permission" xml:space="preserve">
+		<value>Permiso</value>
+	</data>
+	<data name="select_all" xml:space="preserve">
+		<value>Seleccionar todo</value>
+	</data>
+	<data name="clear_all" xml:space="preserve">
+		<value>Limpiar todo</value>
+	</data>
+	<data name="add" xml:space="preserve">
+		<value>Agregar</value>
+	</data>
+	<data name="view" xml:space="preserve">
+		<value>Ver</value>
+	</data>
+	<data name="filters" xml:space="preserve">
+		<value>Filtros</value>
+	</data>
+	<data name="no_permissions" xml:space="preserve">
+		<value>Sin permisos asociados</value>
+	</data>
+	<data name="permission_pattern_error" xml:space="preserve">
+		<value>Un permiso debe tener el siguiente formato: modulo.accion</value>
+	</data>
+	<data name="tracing" xml:space="preserve">
+		<value>Seguimiento</value>
+	</data>
+	<data name="onhold" xml:space="preserve">
+		<value>En espera</value>
+	</data>
+	<data name="created_date" xml:space="preserve">
+		<value>Fecha de creación</value>
+	</data>
+	<data name="parts" xml:space="preserve">
+		<value>Partes</value>
+	</data>
+	<data name="view_datasheet" xml:space="preserve">
+		<value>Ver ficha técnica</value>
+	</data>
+	<data name="requested_by" xml:space="preserve">
+		<value>Solicitado por</value>
+	</data>
+	<data name="create_order" xml:space="preserve">
+		<value>Crear orden</value>
+	</data>
+	<data name="customer_bill_to" xml:space="preserve">
+		<value>Facturado a</value>
+	</data>
+	<data name="customer_ship_to" xml:space="preserve">
+		<value>Enviado a</value>
+	</data>
+	<data name="exchange_rate" xml:space="preserve">
+		<value>Taza de cambio</value>
+	</data>
+	<data name="type_transport" xml:space="preserve">
+		<value>Tipo de transporte</value>
+	</data>
+	<data name="type_currency" xml:space="preserve">
+		<value>Tipo de moneda</value>
+	</data>
+	<data name="price" xml:space="preserve">
+		<value>Precio</value>
+	</data>
+	<data name="category" xml:space="preserve">
+		<value>Categoría</value>
+	</data>
+	<data name="customer_data" xml:space="preserve">
+		<value>Datos de cliente</value>
+	</data>
+	<data name="currency" xml:space="preserve">
+		<value>Moneda</value>
+	</data>
+	<data name="not_specified" xml:space="preserve">
+		<value>No especificado</value>
+	</data>
+	<data name="address" xml:space="preserve">
+		<value>Dirección</value>
+	</data>
+	<data name="payment_terms" xml:space="preserve">
+		<value>Terminos de pago</value>
+	</data>
+	<data name="piece" xml:space="preserve">
+		<value>Pieza</value>
+	</data>
+	<data name="pieces" xml:space="preserve">
+		<value>Piezas</value>
+	</data>
+	<data name="serie" xml:space="preserve">
+		<value>Serie</value>
+	</data>
+	<data name="click_for_enable" xml:space="preserve">
+		<value>Clic para habilitar</value>
+	</data>
+	<data name="to" xml:space="preserve">
+		<value>Para</value>
+	</data>
+	<data name="process" xml:space="preserve">
+		<value>Procesar</value>
+	</data>
+	<data name="number" xml:space="preserve">
+		<value>Número</value>
+	</data>
+	<data name="actual" xml:space="preserve">
+		<value>Actual</value>
+	</data>
+	<data name="description" xml:space="preserve">
+		<value>Descripción</value>
+	</data>
+	<data name="unit_price" xml:space="preserve">
+		<value>Precio unitario</value>
+	</data>
+	<data name="options" xml:space="preserve">
+		<value>Opciones</value>
+	</data>
+	<data name="filter" xml:space="preserve">
+		<value>Filtrar</value>
+	</data>
+	<data name="calendar" xml:space="preserve">
+		<value>Calendario</value>
+	</data>
+	<data name="onreview" xml:space="preserve">
+		<value>En revisión</value>
+	</data>
+	<data name="delivered" xml:space="preserve">
+		<value>Despachado</value>
+	</data>
+	<data name="state" xml:space="preserve">
+		<value>Estado</value>
+	</data>
+	<data name="prices" xml:space="preserve">
+		<value>Precios</value>
+	</data>
+	<data name="base" xml:space="preserve">
+		<value>Base</value>
+	</data>
+	<data name="subtotal" xml:space="preserve">
+		<value>Subtotal</value>
+	</data>
+	<data name="date" xml:space="preserve">
+		<value>Fecha</value>
+	</data>
+	<data name="characteristics" xml:space="preserve">
+		<value>Características</value>
+	</data>
+	<data name="levels" xml:space="preserve">
+		<value>Niveles</value>
+	</data>
+	<data name="downloading" xml:space="preserve">
+		<value>Descargando</value>
+	</data>
+	<data name="not_found" xml:space="preserve">
+		<value>No encontrado</value>
+	</data>
+	<data name="config_prices" xml:space="preserve">
+		<value>Configurar precios</value>
+	</data>
+	<data name="total_price" xml:space="preserve">
+		<value>Precio total</value>
+	</data>
+	<data name="searching" xml:space="preserve">
+		<value>Buscando</value>
+	</data>
+	<data name="application_date" xml:space="preserve">
+		<value>Fecha de solicitud</value>
+	</data>
+	<data name="select_date" xml:space="preserve">
+		<value>Selecciona una fecha</value>
+	</data>
+	<data name="info_reclamation" xml:space="preserve">
+		<value>Información de reclamo</value>
+	</data>
+	<data name="install" xml:space="preserve">
+		<value>Instalación</value>
+	</data>
+	<data name="months" xml:space="preserve">
+		<value>Meses</value>
+	</data>
+	<data name="user_movements" xml:space="preserve">
+		<value>Movimientos de usuarios</value>
+	</data>
+	<data name="audit" xml:space="preserve">
+		<value>Auditoría</value>
+	</data>
+	<data name="execute" xml:space="preserve">
+		<value>Ejecutar</value>
+	</data>
+	<data name="action" xml:space="preserve">
+		<value>Acción</value>
+	</data>
+	<data name="select_date_range" xml:space="preserve">
+		<value>Selecciona un rango de fechas</value>
+	</data>
+	<data name="role" xml:space="preserve">
+		<value>Rol</value>
+	</data>
+	<data name="browser" xml:space="preserve">
+		<value>Navegador</value>
+	</data>
+	<data name="operating_system" xml:space="preserve">
+		<value>Sistema operativo</value>
+	</data>
+	<data name="object" xml:space="preserve">
+		<value>Objeto</value>
+	</data>
+	<data name="ip_address" xml:space="preserve">
+		<value>Dirección IP</value>
+	</data>
+	<data name="info_request" xml:space="preserve">
+		<value>Información de la petición</value>
+	</data>
+	<data name="info_device" xml:space="preserve">
+		<value>Información del dispositivo</value>
+	</data>
+	<data name="view_details" xml:space="preserve">
+		<value>Ver detalles</value>
+	</data>
+	<data name="change_password" xml:space="preserve">
+		<value>Cambiar contraseña</value>
+	</data>
+	<data name="old_password" xml:space="preserve">
+		<value>Contraseña anterior</value>
+	</data>
+	<data name="new_password" xml:space="preserve">
+		<value>Nueva contraseña</value>
+	</data>
+	<data name="password_updated" xml:space="preserve">
+		<value>Contraseña actualizada exitosamente</value>
+	</data>
+	<data name="view_purchase_order" xml:space="preserve">
+		<value>Ver orden de compra</value>
+	</data>
+	<data name="registration_date" xml:space="preserve">
+		<value>Fecha de registro</value>
+	</data>
+	<data name="warranty" xml:space="preserve">
+		<value>Garantía</value>
+	</data>
+	<data name="shipping_date" xml:space="preserve">
+		<value>Fecha de embarque</value>
+	</data>
+	<data name="signature_auth_seal" xml:space="preserve">
+		<value>Firma y sello autorizados</value>
+	</data>
+	<data name="complete" xml:space="preserve">
+		<value>Completo</value>
+	</data>
+	<data name="incomplete" xml:space="preserve">
+		<value>Incompleto</value>
+	</data>
+	<data name="cancelled" xml:space="preserve">
+		<value>Cancelado</value>
+	</data>
+	<data name="copy_in_process" xml:space="preserve">
+		<value>Copia en proceso</value>
+	</data>
+	<data name="success_sync" xml:space="preserve">
+		<value>Sincronización exitosa</value>
+	</data>
+	<data name="partial" xml:space="preserve">
+		<value>Parcial</value>
+	</data>
+	<data name="profile" xml:space="preserve">
+		<value>Perfil</value>
+	</data>
+	<data name="profile_picture" xml:space="preserve">
+		<value>Imagen de perfil</value>
+	</data>
+	<data name="dispatch" xml:space="preserve">
+		<value>Despachos</value>
+	</data>
+	<data name="length" xml:space="preserve">
+		<value>Largo</value>
+	</data>
+	<data name="width" xml:space="preserve">
+		<value>Ancho</value>
+	</data>
+	<data name="height" xml:space="preserve">
+		<value>Altura</value>
+	</data>
+	<data name="weight" xml:space="preserve">
+		<value>Peso</value>
+	</data>
+	<data name="generate_barcodes" xml:space="preserve">
+		<value>Generar código de barras</value>
+	</data>
+	<data name="update_date" xml:space="preserve">
+		<value>Fecha de actualización</value>
+	</data>
+	<data name="created_by" xml:space="preserve">
+		<value>Creado por</value>
+	</data>
+	<data name="updated_by" xml:space="preserve">
+		<value>Modificado por</value>
+	</data>
+	<data name="gross_weight" xml:space="preserve">
+		<value>Peso bruto</value>
+	</data>
+	<data name="net_weight" xml:space="preserve">
+		<value>Peso neto</value>
+	</data>
+	<data name="view_photos" xml:space="preserve">
+		<value>Ver fotos</value>
+	</data>
+	<data name="total_weight" xml:space="preserve">
+		<value>Peso total</value>
+	</data>
+	<data name="dimensions" xml:space="preserve">
+		<value>Dimensiones</value>
+	</data>
+	<data name="register" xml:space="preserve">
+		<value>Registrar</value>
+	</data>
+	<data name="scaled" xml:space="preserve">
+		<value>Escalado</value>
+	</data>
+	<data name="response_time" xml:space="preserve">
+		<value>Tiempo de respuesta</value>
+	</data>
+	<data name="minutes" xml:space="preserve">
+		<value>Minutos</value>
+	</data>
+	<data name="poll" xml:space="preserve">
+		<value>Encuesta</value>
+	</data>
+	<data name="doc_number" xml:space="preserve">
+		<value>Número de documento</value>
+	</data>
+	<data name="part" xml:space="preserve">
+		<value>Parte</value>
+	</data>
+	<data name="spare_part" xml:space="preserve">
+		<value>Repuesto</value>
+	</data>
+	<data name="spare_parts" xml:space="preserve">
+		<value>Repuestos</value>
+	</data>
+	<data name="activity" xml:space="preserve">
+		<value>Actividad</value>
+	</data>
+	<data name="activities" xml:space="preserve">
+		<value>Actividades</value>
+	</data>
+	<data name="aux" xml:space="preserve">
+		<value>Auxiliar</value>
+	</data>
+	<data name="type" xml:space="preserve">
+		<value>Tipo</value>
+	</data>
+	<data name="frequency_days" xml:space="preserve">
+		<value>Frecuencia en días</value>
+	</data>
+	<data name="requested" xml:space="preserve">
+		<value>Solicitado</value>
+	</data>
+	<data name="auxiliaries" xml:space="preserve">
+		<value>Auxiliares</value>
+	</data>
+	<data name="hours" xml:space="preserve">
+		<value>Horas</value>
+	</data>
+	<data name="each" xml:space="preserve">
+		<value>Cada</value>
+	</data>
+	<data name="days" xml:space="preserve">
+		<value>Días</value>
+	</data>
+	<data name="common_options" xml:space="preserve">
+		<value>Opciones comunes</value>
+	</data>
+	<data name="value" xml:space="preserve">
+		<value>Valor</value>
+	</data>
+	<data name="admins" xml:space="preserve">
+		<value>Administradores</value>
+	</data>
+	<data name="origin" xml:space="preserve">
+		<value>Origen</value>
+	</data>
+	<data name="without_register" xml:space="preserve">
+		<value>Sin registros</value>
+	</data>
+	<data name="configurate" xml:space="preserve">
+		<value>Configurar</value>
+	</data>
+	<data name="copy_from" xml:space="preserve">
+		<value>Copiar de</value>
+	</data>
+	<data name="warehouse" xml:space="preserve">
+		<value>Almacén</value>
+	</data>
+	<data name="critical" xml:space="preserve">
+		<value>Crítico</value>
+	</data>
+	<data name="area" xml:space="preserve">
+		<value>Área</value>
+	</data>
+	<data name="warehouse_2" xml:space="preserve">
+		<value>Bodega</value>
+	</data>
+	<data name="calendar_general" xml:space="preserve">
+		<value>Calendario general</value>
+	</data>
+	<data name="accept" xml:space="preserve">
+		<value>Aceptar</value>
+	</data>
+	<data name="full" xml:space="preserve">
+		<value>Completo</value>
+	</data>
+	<data name="only_this_day" xml:space="preserve">
+		<value>Solo este día</value>
+	</data>
+	<data name="add_account" xml:space="preserve">
+		<value>Agregar otra cuenta</value>
+	</data>
+	<data name="switching_account" xml:space="preserve">
+		<value>Cambiando cuenta</value>
+	</data>
+	<data name="commonoptions" xml:space="preserve">
+		<value>Opciones comunes</value>
+	</data>
+	<data name="saleorders" xml:space="preserve">
+		<value>Ordenes</value>
+	</data>
+	<data name="audits" xml:space="preserve">
+		<value>Auditoría</value>
+	</data>
+	<data name="reason" xml:space="preserve">
+		<value>Motivo</value>
+	</data>
+	<data name="units" xml:space="preserve">
+		<value>Unidades</value>
+	</data>
+	<data name="non_working_day" xml:space="preserve">
+		<value>Día no laboral</value>
+	</data>
+	<data name="date_delivery" xml:space="preserve">
+		<value>Fecha de entrega estimada</value>
+	</data>
+	<data name="assign_successfully" xml:space="preserve">
+		<value>Asignación existosa</value>
+	</data>
+	<data name="search_order" xml:space="preserve">
+		<value>Buscar orden</value>
+	</data>
+	<data name="merry_christmas" xml:space="preserve">
+		<value>¡Feliz Navidad!</value>
+	</data>
+	<data name="happy_halloween" xml:space="preserve">
+		<value>¡Feliz Halloween!</value>
+	</data>
+	<data name="initializing" xml:space="preserve">
+		<value>Inicializando</value>
+	</data>
+	<data name="red" xml:space="preserve">
+		<value>Red</value>
+	</data>
+	<data name="invisible" xml:space="preserve">
+		<value>Invisible</value>
+	</data>
+	<data name="clear_search" xml:space="preserve">
+		<value>Borrar busqueda</value>
+	</data>
+	<data name="order_list" xml:space="preserve">
+		<value>Ordenar lista</value>
+	</data>
+	<data name="file_upload" xml:space="preserve">
+		<value>Subir archivo</value>
+	</data>
+	<data name="photo_upload" xml:space="preserve">
+		<value>Subir foto</value>
+	</data>
+	<data name="active" xml:space="preserve">
+		<value>Activo</value>
+	</data>
+	<data name="inactive" xml:space="preserve">
+		<value>Inactivo</value>
+	</data>
+	<data name="busy" xml:space="preserve">
+		<value>Ocupado</value>
+	</data>
+	<data name="claims" xml:space="preserve">
+		<value>Claims</value>
+	</data>
+	<data name="image_upload" xml:space="preserve">
+		<value>Subir imagen</value>
+	</data>
+	<data name="start_date" xml:space="preserve">
+		<value>Fecha de inicio</value>
+	</data>
+	<data name="end_date" xml:space="preserve">
+		<value>Fecha de finalización</value>
+	</data>
+	<data name="details" xml:space="preserve">
+		<value>Detalles</value>
+	</data>
+	<data name="invoice" xml:space="preserve">
+		<value>Factura</value>
+	</data>
+	<data name="date_issue" xml:space="preserve">
+		<value>Fecha de emisión</value>
+	</data>
+	<data name="due_date" xml:space="preserve">
+		<value>Fecha de vencimiento</value>
+	</data>
+	<data name="purchase_order" xml:space="preserve">
+		<value>Orden de compra</value>
+	</data>
+	<data name="invoice_payments" xml:space="preserve">
+		<value>Pagos realizados</value>
+	</data>
+	<data name="no_register" xml:space="preserve">
+		<value>No registra</value>
+	</data>
+	<data name="running" xml:space="preserve">
+		<value>Ejecutando</value>
+	</data>
+	<data name="deferred" xml:space="preserve">
+		<value>Aplazado</value>
+	</data>
+	<data name="completed" xml:space="preserve">
+		<value>Completado</value>
+	</data>
+	<data name="assistance" xml:space="preserve">
+		<value>Asistencia</value>
+	</data>
+	<data name="duration" xml:space="preserve">
+		<value>Duración</value>
+	</data>
+	<data name="days_arrears" xml:space="preserve">
+		<value>Días en mora</value>
+	</data>
+	<data name="contact" xml:space="preserve">
+		<value>Contacto</value>
+	</data>
+	<data name="contacts" xml:space="preserve">
+		<value>Contactos</value>
+	</data>
+	<data name="unpaid" xml:space="preserve">
+		<value>Pendiente de pago</value>
+	</data>
+	<data name="total_arrear" xml:space="preserve">
+		<value>Total en mora</value>
+	</data>
+	<data name="expired" xml:space="preserve">
+		<value>Vencido</value>
+	</data>
+	<data name="expired_soon" xml:space="preserve">
+		<value>Pronto a vencerse</value>
+	</data>
+	<data name="pendient_approval" xml:space="preserve">
+		<value>Pendiente de aprobación</value>
+	</data>
+	<data name="refuse" xml:space="preserve">
+		<value>Rechazar</value>
+	</data>
+	<data name="due_date_original" xml:space="preserve">
+		<value>Fecha original</value>
+	</data>
+	<data name="due_date_requested" xml:space="preserve">
+		<value>Fecha solicitada</value>
+	</data>
+	<data name="approval" xml:space="preserve">
+		<value>Aprobar</value>
+	</data>
+	<data name="due_date_request_sended" xml:space="preserve">
+		<value>Solicitud de cambio enviada</value>
+	</data>
+	<data name="sale_invoice" xml:space="preserve">
+		<value>Factura de venta</value>
+	</data>
+	<data name="total_value" xml:space="preserve">
+		<value>Valor total</value>
+	</data>
+	<data name="responsable" xml:space="preserve">
+		<value>Responsable</value>
+	</data>
+	<data name="sell_invoice" xml:space="preserve">
+		<value>Factura de venta</value>
+	</data>
+	<data name="seller" xml:space="preserve">
+		<value>Vendedor</value>
+	</data>
+	<data name="page" xml:space="preserve">
+		<value>Página</value>
+	</data>
+	<data name="of" xml:space="preserve">
+		<value>de</value>
+	</data>
+	<data name="tel" xml:space="preserve">
+		<value>Tel</value>
+	</data>
+	<data name="payment_instructions" xml:space="preserve">
+		<value>Instrucciones de pago</value>
+	</data>
+	<data name="traceability" xml:space="preserve">
+		<value>Trazabilidad</value>
+	</data>
+	<data name="serial" xml:space="preserve">
+		<value>Serial</value>
+	</data>
+	<data name="transport" xml:space="preserve">
+		<value>Transporte</value>
+	</data>
+	<data name="insurance" xml:space="preserve">
+		<value>Seguro</value>
+	</data>
+	<data name="total_area" xml:space="preserve">
+		<value>Area total</value>
+	</data>
+	<data name="discounts" xml:space="preserve">
+		<value>Descuentos</value>
+	</data>
+	<data name="taxes" xml:space="preserve">
+		<value>Impuestos</value>
+	</data>
+	<data name="see_saved_file" xml:space="preserve">
+		<value>Ver archivo guardado</value>
+	</data>
+	<data name="select_file" xml:space="preserve">
+		<value>Seleccionar archivo</value>
+	</data>
+	<data name="select_drag_file" xml:space="preserve">
+		<value>Seleccionar o arrastra un archivo aquí</value>
+	</data>
+    <data name="dz_help_1" xml:space="preserve">
+		<value>Clic aquí ó arrastra y suelta un archivo</value>
+	</data>
+	<data name="server_error" xml:space="preserve">
+		<value>Ocurrio un error al procesar tu solicitud, por favor intenta de nuevo más tarde</value>
+	</data>
+	<data name="no_internet_conexion" xml:space="preserve">
+		<value>Sin conexión a internet</value>
+	</data>
+	<data name="no_server_conexion" xml:space="preserve">
+		<value>Sin conexión con el servidor, por favor espera...</value>
+	</data>
+	<data name="offline_msg" xml:space="preserve">
+		<value>No tienes acceso a internet, por favor verifica tu conexión para continuar...</value>
+	</data>
+	<data name="established_server_conexion" xml:space="preserve">
+		<value>¡Conexión establecida!</value>
+	</data>
+	<data name="most_recent" xml:space="preserve">
+		<value>Más recientes</value>
+	</data>
+	<data name="most_items_recent_of" xml:space="preserve">
+		<value>ordenes más recientes de &lt;strong&gt;{0}&lt;/strong&gt;</value>
+	</data>
+	<data name="finded_items_of" xml:space="preserve">
+		<value>Resultado: &lt;strong&gt;{0}&lt;/strong&gt; elemento(s) encontrada(s) de &lt;strong&gt;{1}&lt;/strong&gt;</value>
+	</data>
+	<data name="filter_items_of" xml:space="preserve">
+		<value>Resultado: &lt;strong&gt;{0}&lt;/strong&gt; elemento(s) filtrado(s) de los &lt;strong&gt;{1}&lt;/strong&gt; más recientes</value>
+	</data>
+	<data name="selected_items_of" xml:space="preserve">
+		<value>Seleccionados: &lt;strong&gt;{0}&lt;/strong&gt; elemento(s) de &lt;strong&gt;{1}&lt;/strong&gt;</value>
+	</data>
+	<data name="perms_admin" xml:space="preserve">
+		<value>Estos permisos solo deben asignarse a los administradores del sistema</value>
+	</data>
+    <data name="country" xml:space="preserve">
+        <value>País</value>
+    </data>
+    <data name="countries" xml:space="preserve">
+        <value>Países</value>
+    </data>
+    <data name="city" xml:space="preserve">
+        <value>Ciudad</value>
+    </data>
+    <data name="cities" xml:space="preserve">
+        <value>Ciudades</value>
+    </data>
+    <data name="edit_cities" xml:space="preserve">
+        <value>Editar ciudades</value>
+    </data>
+    <data name="sort" xml:space="preserve">
+        <value>Ordenar</value>
+    </data>
+    <data name="export_as" xml:space="preserve">
+        <value>Exportar como...</value>
+    </data>
+    <data name="minlength_error" xml:space="preserve">
+        <value>Caracteres mínimos: {0}</value>
+    </data>
+    <data name="city_code" xml:space="preserve">
+        <value>Código de ciudad</value>
+    </data>
+    <data name="state_code" xml:space="preserve">
+        <value>Códido de departamento</value>
+    </data>
+    <data name="state_name" xml:space="preserve">
+        <value>Nombre de departamento</value>
+    </data>
+    <data name="supplier" xml:space="preserve">
+        <value>Proveedor</value>
+    </data>
+    <data name="suppliers" xml:space="preserve">
+        <value>Proveedores</value>
+    </data>
+    <data name="product" xml:space="preserve">
+        <value>Producto</value>
+    </data>
+    <data name="products" xml:space="preserve">
+        <value>Productos</value>
+    </data>
+    <data name="type_products" xml:space="preserve">
+        <value>Tipos de producto</value>
+    </data>
+    <data name="type_product" xml:space="preserve">
+        <value>Tipo de producto</value>
+    </data>
+    <data name="inventory" xml:space="preserve">
+        <value>Inventario</value>
+    </data>
+    <data name="stock" xml:space="preserve">
+        <value>Stock</value>
+    </data>
+    <data name="brands" xml:space="preserve">
+        <value>Marcas</value>
+    </data>
+    <data name="brand" xml:space="preserve">
+        <value>Marca</value>
+    </data>
+    <data name="services" xml:space="preserve">
+        <value>Servicios</value>
+    </data>
+    <data name="service" xml:space="preserve">
+        <value>Servicio</value>
+    </data>
+    <data name="short_description" xml:space="preserve">
+        <value>Descripción corta</value>
+    </data>
+    <data name="technical_specifications" xml:space="preserve">
+        <value>Especificaciones técnicas</value>
+    </data>
+    <data name="it_includes" xml:space="preserve">
+        <value>Incluye</value>
+    </data>
+    <data name="settings" xml:space="preserve">
+        <value>Ajustes</value>
+    </data>
+    <data name="product_delete_warning" xml:space="preserve">
+        <value>Al eliminar este producto, se eliminarán todos los registros asociados a este</value>
+    </data>
+    <data name="enabled_product" xml:space="preserve">
+        <value>Habilitar producto</value>
+    </data>
+    <data name="disabled_product" xml:space="preserve">
+        <value>Deshabilitar producto</value>
+    </data>
+    <data name="product_warning_enabled" xml:space="preserve">
+        <value>Al habilitar este producto, toda su información incluyendo precios y documentación sera visible para su uso en ventas y facturación</value>
+    </data>
+    <data name="product_warning_disabled" xml:space="preserve">
+        <value>Al deshabilitar este producto, se bloqueará toda su información incluyendo precios para su uso en ventas y facturación</value>
+    </data>
+    <data name="product_delete" xml:space="preserve">
+        <value>Eliminar producto</value>
+    </data>
+    <data name="product_warning_delete" xml:space="preserve">
+        <value>Al eliminar este producto, se le eliminará toda su información incluyendo precios (esta eliminación solo se permite si no existen ordenes de compra, facturas u otros elementos relacionados). ESTA ACCIÓN NO SE PUEDE DESHACER</value>
+    </data>
+    <data name="lowest_price" xml:space="preserve">
+        <value>Precio más bajo</value>
+    </data>
+    <data name="price_stock" xml:space="preserve">
+        <value>Precios y stock</value>
+    </data>
+    <data name="document_type" xml:space="preserve">
+        <value>Tipo de documento</value>
+    </data>
+    <data name="document_number" xml:space="preserve">
+        <value>Número de documento</value>
+    </data>
+    <data name="type_company" xml:space="preserve">
+        <value>Tipo de compañia</value>
+    </data>
+    <data name="documents" xml:space="preserve">
+        <value>Documentos</value>
+    </data>
+    <data name="enabled_supplier" xml:space="preserve">
+        <value>Habilitar proveedor</value>
+    </data>
+    <data name="disabled_supplier" xml:space="preserve">
+        <value>Deshabilitar proveedor</value>
+    </data>
+    <data name="supplier_warning_enabled" xml:space="preserve">
+        <value>Al habilitar este proveedor, toda su información incluyendo precios y documentación sera visible para su uso en ordenes de compra y facturación</value>
+    </data>
+    <data name="supplier_warning_disabled" xml:space="preserve">
+        <value>Al deshabilitar este proveedor, se bloqueará toda su información incluyendo precios y documentación para su uso en ordenes de compra y facturación</value>
+    </data>
+    <data name="delete_supplier" xml:space="preserve">
+        <value>Eliminar proveedor</value>
+    </data>
+    <data name="sale_price" xml:space="preserve">
+        <value>Precio venta</value>
+    </data>
+    <data name="supplier_warning_delete" xml:space="preserve">
+        <value>Al eliminar este proveedor, se le eliminará toda su información incluyendo precios y documentación (esta eliminación solo se permite si no existen ordenes de compra u otros elementos relacionados). ESTA ACCIÓN NO SE PUEDE DESHACER</value>
+    </data>
+    <data name="maximize_window" xml:space="preserve">
+        <value>Maximizar ventana</value>
+    </data>
+    <data name="restore_window" xml:space="preserve">
+        <value>Restaurar ventana</value>
+    </data>
+    <data name="contact_name" xml:space="preserve">
+        <value>Nombre de contacto</value>
+    </data>
+    <data name="stock_price" xml:space="preserve">
+        <value>Precio de stock</value>
+    </data>
+    <data name="reseller_price" xml:space="preserve">
+        <value>Precio de reventa</value>
+    </data>
+    <data name="abbreviation" xml:space="preserve">
+        <value>Abreviación</value>
+    </data>
+    <data name="supplier_doc_1" xml:space="preserve">
+        <value>RUT</value>
+    </data>
+    <data name="supplier_doc_2" xml:space="preserve">
+        <value>Camara de comercio</value>
+    </data>
+    <data name="supplier_doc_3" xml:space="preserve">
+        <value>Cédula representante legal</value>
+    </data>
+    <data name="supplier_doc_4" xml:space="preserve">
+        <value>Certificación bancaria</value>
+    </data>
+    <data name="upload_documents" xml:space="preserve">
+        <value>Subir documentación</value>
+    </data>
+    <data name="add_invoice" xml:space="preserve">
+        <value>Crear factura</value>
+    </data>
+    <data name="add_oc" xml:space="preserve">
+        <value>Crear orden de compra</value>
+    </data>
+    <data name="add_quotation" xml:space="preserve">
+        <value>Crear cotización</value>
+    </data>
+    <data name="parameterization" xml:space="preserve">
+        <value>Parametrización</value>
+    </data>
+    <data name="customer_invoices_pending" xml:space="preserve">
+        <value>Facturas pendientes</value>
+    </data>
+    <data name="sold_out" xml:space="preserve">
+        <value>Agotado</value>
+    </data>
+    <data name="add_product" xml:space="preserve">
+        <value>Agregar producto</value>
+    </data>
+    <data name="download_this_list" xml:space="preserve">
+        <value>Descargar esta lista</value>
+    </data>
+    <data name="export" xml:space="preserve">
+        <value>Exportar</value>
+    </data>
+    <data name="edit_profile" xml:space="preserve">
+        <value>Editar perfil</value>
+    </data>
+    <data name="shortcuts" xml:space="preserve">
+        <value>Accesos directos</value>
+    </data>
+    <data name="notifications" xml:space="preserve">
+        <value>Notificaciones</value>
+    </data>
+    <data name="clear" xml:space="preserve">
+        <value>Limpiar</value>
+    </data>
+    <data name="help_add_product" xml:space="preserve">
+        <value>Comineza agregando un producto aquí</value>
+    </data>
+    <data name="favorites" xml:space="preserve">
+        <value>Favoritos</value>
+    </data>
+    <data name="add_permission" xml:space="preserve">
+        <value>Agregar permiso</value>
+    </data>
+    <data name="edit_list" xml:space="preserve">
+        <value>Editar lista</value>
+    </data>
+    <data name="delete_alert_multiple" xml:space="preserve">
+        <value>¿Desea eliminar todos los elementos seleccionados?</value>
+    </data>
+    <data name="delete_warning" xml:space="preserve">
+        <value>Esta acción no se puede deshacer</value>
+    </data>
+    <data name="forgot_password" xml:space="preserve">
+        <value>Olvidé mi contraseña</value>
+    </data>
+    <data name="remember_me" xml:space="preserve">
+        <value>Recordarme</value>
+    </data>
+    <data name="or" xml:space="preserve">
+        <value>ó</value>
+    </data>
+	<data name="all_rights_reserved" xml:space="preserve">
+		<value>© {0} SER. Todos los derechos reservados.</value>
+	</data>
+	<data name="privacy_policy" xml:space="preserve">
+		<value>Política de privacidad</value>
+	</data>
+	<data name="terms_service" xml:space="preserve">
+		<value>Términos y Condiciones</value>
+	</data>
+	<data name="forgot_password_help" xml:space="preserve">
+		<value>Escribe tu correo electrónico o nombre de usuario y te enviaremos un enlace para reestablecer tu contraseña</value>
+	</data>
+	<data name="forgot_password_sended" xml:space="preserve">
+		<value>Enviado! por favor revisa tu correo para continuar</value>
+	</data>
+	<data name="invalid_username_or_password" xml:space="preserve">
+		<value>Usuario y/o contraseña incorrecta</value>
+	</data>
+	<data name="linked_accounts" xml:space="preserve">
+		<value>Cuentas vinculadas</value>
+	</data>
+	<data name="hi_name" xml:space="preserve">
+		<value>¡Hola {0}!</value>
+	</data>
+	<data name="forget_password_1" xml:space="preserve">
+		<value>Se envió este enlace para restablecer contraseña a tu correo electrónico para que puedas volver a acceder a tu cuenta.</value>
+	</data>
+	<data name="forget_password_2" xml:space="preserve">
+		<value>Reestablecer mi contraseña</value>
+	</data>
+	<data name="forget_password_3" xml:space="preserve">
+		<value>¿No sabes por qué recibiste este mensaje?</value>
+	</data>
+	<data name="forget_password_4" xml:space="preserve">
+		<value>Una persona que no recuerda los detalles de su cuenta proporcionó tu dirección de correo electrónico por error. Puedes ignorar este mensaje.</value>
+	</data>
+	<data name="forget_password_5" xml:space="preserve">
+		<value>Para proteger tu cuenta, no reenvíes este mensaje ni compartas el enlace con nadie.</value>
+	</data>
+	<data name="not_reply_ses" xml:space="preserve">
+		<value>No se pueden enviar respuestas a esta dirección de correo electrónico.</value>
+	</data>
+	<data name="company_name" xml:space="preserve">
+		<value>SER Soluciones</value>
+	</data>
+	<data name="company_team" xml:space="preserve">
+		<value>El equipo de SER</value>
+	</data>
+	<data name="company_address" xml:space="preserve">
+		<value>Calle 95 #14-45 Piso 8, Bogotá, Colombia.</value>
+	</data>
+	<data name="company_website" xml:space="preserve">
+		<value>https://sersoluciones.com</value>
+	</data>
+	<data name="dashboard" xml:space="preserve">
+		<value>Dashboard</value>
+	</data>
+	<data name="latitude" xml:space="preserve">
+		<value>Latitud</value>
+	</data>
+	<data name="longitude" xml:space="preserve">
+		<value>Longitud</value>
+	</data>
+	<data name="fullscreen" xml:space="preserve">
+		<value>Pantalla completa</value>
+	</data>
+	<data name="coordinates" xml:space="preserve">
+		<value>Coordenadas</value>
+	</data>
+	<data name="speed" xml:space="preserve">
+		<value>Velocidad</value>
+	</data>
+	<data name="altitude" xml:space="preserve">
+		<value>Altitud</value>
+	</data>
+	<data name="surveys" xml:space="preserve">
+		<value>Encuestas</value>
+	</data>
+	<data name="results" xml:space="preserve">
+		<value>Resultados</value>
+	</data>
+	<data name="view_fullscreen" xml:space="preserve">
+		<value>Pasar a pantalla completa</value>
+	</data>
+	<data name="exit_fullscreen" xml:space="preserve">
+		<value>Salir de pantalla completa</value>
+	</data>
+	<data name="add_common_option" xml:space="preserve">
+		<value>Agregar opción común</value>
+	</data>
+	<data name="add_role" xml:space="preserve">
+		<value>Agregar rol</value>
+	</data>
+	<data name="click_for_details" xml:space="preserve">
+		<value>Haz clic para detalles o editar</value>
+	</data>
+</root>

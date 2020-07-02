@@ -1,0 +1,61 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+		<UserSecretsId>aspnet-SerAPI-54F8499D-D802-4B6A-981B-CC7735119D00</UserSecretsId>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Google.Apis.Auth" Version="1.45.0" />
+		<PackageReference Include="EPPlus" Version="5.1.1" />
+		<PackageReference Include="IdentityServer4" Version="4.0.1" />
+		<PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
+		<PackageReference Include="IdentityServer4.AspNetIdentity" Version="4.0.1" />
+		<PackageReference Include="IdentityServer4.EntityFramework" Version="4.0.1" />
+		<PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="4.0.1" />
+		<PackageReference Include="IdentityServer4.Storage" Version="4.0.1" />
+
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.5" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.5" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.5">
+		  <PrivateAssets>all</PrivateAssets>
+		  <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Include="Microsoft.EntityFrameworkCore.DynamicLinq" Version="1.1.5" />
+
+		<PackageReference Include="GraphQL" Version="3.0.0-preview-1490" />
+		<PackageReference Include="GraphQL.Conventions" Version="2.5.4" />
+		<PackageReference Include="GraphQL.Server.Transports.AspNetCore.SystemTextJson" Version="3.5.0-alpha0046" />
+		<PackageReference Include="GraphQL.Server.Ui.Playground" Version="3.5.0-alpha0046" />
+		<PackageReference Include="GraphQL.Server.Authorization.AspNetCore" Version="3.5.0-alpha0046" />
+		<PackageReference Include="GraphQL-Parser" Version="5.1.2" />
+		<PackageReference Include="Humanizer.Core" Version="2.8.26" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.3" />
+		<PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="3.1.3" />
+		<PackageReference Include="NetTopologySuite.IO.GeoJSON" Version="2.0.3" />
+
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="3.1.4" />
+
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.NetTopologySuite" Version="3.1.4" />
+
+		<PackageReference Include="Sentry.AspNetCore" Version="2.1.4" />
+
+		<PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+		<PackageReference Include="AWSSDK.CloudFront" Version="3.3.102.12" />
+		<PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.101" />
+		<PackageReference Include="AWSSDK.S3" Version="3.3.111.20" />
+
+		<PackageReference Include="MailKit" Version="2.7.0" />
+
+		<PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="5.5.1" />
+
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="GraphQl\Repositories\" />
+	  <Folder Include="Services\" />
+	</ItemGroup>
+
+</Project>
