@@ -1,0 +1,214 @@
+<div class="wrapper">
+
+    <div class="tools">
+        <div *ngIf="!state.loading" class="controls">
+            <button type="button" class="bttn icon" [disabled]="modelForm.pristine || state.isSaving" (click)="undo()" [title]="'undo' | translate">
+                <mat-icon>undo</mat-icon>
+            </button>
+
+            <button type="submit" class="bttn icon green" [disabled]="modelForm.invalid || state.isSaving" (click)="submit()" [title]="'save' | translate">
+                <mat-icon style="color: green;">save</mat-icon>
+            </button>
+        </div>
+        <div *ngIf="!state.loading && !modelForm.get('is_active').value" class="inactive">{{ 'inactive' | translate }}</div>
+
+        <div class="message">{{ getMessage() | translate }}</div>
+
+        <window-controls [state]="state" [dialogRef]="dialogRef"></window-controls>
+    </div>
+
+    <form [formGroup]="modelForm">
+
+        <div class="main">
+            <ng-content *ngIf="(state.loading || state.isSaving) then mainCP; else mainform"></ng-content>
+
+            <ng-template #mainCP>
+                <div class="input shimmer" style="height: 250px;margin-top: 0;"></div>
+                <div class="input shimmer"></div>
+                <div class="input shimmer"></div>
+                <div class="input shimmer"></div>
+                <div class="input shimmer"></div>
+                <div class="input shimmer"></div>
+                <div class="input shimmer"></div>
+            </ng-template>
+
+            <ng-template #mainform>
+
+                <div class="photos">
+                    <!-- <button ng-if="FormData.FormMode" class="bttn blue" type="button" ng-click="setImage($event, 'Photo')">{{ 'file_upload' | translate }}</button>
+
+                    <div class="preview" ngf-background="ModelFiles.Photo"></div>
+
+                    <div class="preview" ng-show="checkValue(1, 'Photo')"
+                    ng-style="{ 'background-image': 'url(@(Configuration.GetSection("S3Bucket").Value)' + Model.Photo + ')'}"></div>
+
+                    <div class="preview no-image" ng-show="checkValue(2, 'Photo')"></div>
+
+                    <button ng-if="FormData.FormMode" type="button" class="bttn icon red clean-file" tooltipster="{{ 'delete_file' | translate }}" ng-show="ModelFiles.Photo || Model.Photo != null" ng-click="clearValue('Photo')">
+                        <i class="icon-delete"></i>
+                    </button> -->
+                    <div class="preview" [ngStyle]="{'background-image': aws.getS3BgUrl(modelFiles[0])}"></div>
+                    <div class="file-tools">
+                        <div class="add" [title]="'add_photos' | translate">
+                            <mat-icon>add</mat-icon>
+                        </div>
+                        <div class="added" *ngFor="let item of modelFiles" [ngStyle]="{'background-image': aws.getS3BgUrl(item)}"></div>
+                    </div>
+                </div>
+
+                <mat-checkbox formControlName="is_new_product" style="align-self: center;margin-bottom: 16px;">{{ 'is_new_product' | translate }}</mat-checkbox>
+
+                <ser-form-element>
+                    <div class="input-group">
+                        <div class="addon">{{ 'price' | translate }}</div>
+                        <input serControl currencyMask formControlName="price" maxlength="10" />
+                    </div>
+
+                    <div serErrors="price">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+
+                <div class="discount-price">
+                    <mat-checkbox formControlName="is_bargain" (change)="onDiscount($event)">{{ 'on_discount' | translate }}</mat-checkbox>
+
+                    <ser-form-element plain>
+                        <input serControl currencyMask formControlName="discount_price" maxlength="10" [placeholder]="modelForm.get('is_bargain').value ? ('discount_price' | translate) : ''" />
+
+                        <div serErrors="discount_price">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+                </div>
+
+                <ser-form-element>
+                    <div class="input-group">
+                        <div class="addon">IVA</div>
+                        <input serControl formControlName="iva" maxlength="10" />
+                    </div>
+                </ser-form-element>
+
+                <ser-form-element class="current-quantity">
+                    <div class="input-group">
+                        <div class="addon">{{ 'current_quantity' | translate }}</div>
+                        <input serControl formControlName="current_quantity" maxlength="10" />
+                    </div>
+
+                    <div serErrors="current_quantity">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+
+                <ser-form-element>
+                    <div class="input-group">
+                        <div class="addon">{{ 'SKU' | translate }}</div>
+                        <input serControl formControlName="sku" maxlength="150" />
+                    </div>
+
+                    <div serErrors="sku">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+
+                <ser-form-element>
+                    <div class="input-group">
+                        <div class="addon" [title]="'barcode' | translate">
+                            <mat-icon svgIcon="ser:barcode">barcode</mat-icon>
+                        </div>
+                        <input serControl formControlName="ean" maxlength="150" />
+                    </div>
+
+                    <div serErrors="ean">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+            </ng-template>
+        </div>
+
+        <div class="content">
+
+            <div *ngIf="!(state.loading || state.isSaving)" class="row start-center">
+                <button *ngIf="state.activeTab !== 0" type="button" class="bttn icon" (click)="setTab(0)" [title]="'back' | translate">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                </button>
+                <div class="flex"></div>
+                <button *ngIf="state.activeTab === 0" type="button" class="bttn icon" (click)="setTab(1)" [title]="'settings' | translate">
+                    <mat-icon>settings</mat-icon>
+                </button>
+            </div>
+
+            <div class="basic-data" [hidden]="state.activeTab !== 0">
+                <ng-content *ngIf="(state.loading || state.isSaving) then cp1; else form1"></ng-content>
+
+                <ng-template #cp1>
+                    <div class="input shimmer"></div>
+                    <div class="input shimmer"></div>
+                </ng-template>
+
+                <ng-template #form1>
+
+                    <ser-form-element>
+                        <label>{{ 'name' | translate }}</label>
+                        <input serControl formControlName="name" maxlength="150" />
+
+                        <div serErrors="name">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <ser-form-element>
+                        <label>{{ 'short_description' | translate }}</label>
+                        <input serControl formControlName="short_description" maxlength="150" />
+                    </ser-form-element>
+
+                    <div class="bttn-group tab-headers">
+                        <button class="bttn" [ngClass]="{'blue active': descActiveTab == 0}" (click)="setDescTab(0)">{{ 'description' | translate }}</button>
+                        <button class="bttn" [ngClass]="{'blue active': descActiveTab == 1}" (click)="setDescTab(1)">{{ 'technical_specifications' | translate }}</button>
+                        <button class="bttn" [ngClass]="{'blue active': descActiveTab == 2}" (click)="setDescTab(2)">{{ 'it_includes' | translate }}</button>
+                    </div>
+
+                    <mat-tab-group  [(selectedIndex)]="descActiveTab">
+                        <mat-tab [label]="'description' | translate">
+                            <ckeditor #editor [editor]="ckEditor" [config]="ckEditorConfig" formControlName="description"></ckeditor>
+                        </mat-tab>
+
+                        <mat-tab [label]="'technical_specifications' | translate">
+
+                        </mat-tab>
+
+                        <mat-tab [label]="'it_includes' | translate">
+
+                        </mat-tab>
+                    </mat-tab-group>
+
+                </ng-template>
+            </div>
+
+            <div class="settings" [hidden]="state.activeTab !== 1">
+                <fieldset *ngIf="claimService.hasPermission('products.update') && state.isEditing && modelForm.get('is_active').value">
+                    <div class="row-wrap">
+                        <em class="orange s-flex">{{ 'product_warning_disabled' | translate }}</em>
+                        <button type="button" class="bttn orange" ng-click="toggleActive($event)">{{ 'disabled_product' | translate }}</button>
+                    </div>
+                </fieldset>
+
+                <fieldset *ngIf="claimService.hasPermission('products.update') && state.isEditing && !modelForm.get('is_active').value">
+                    <div class="row-wrap">
+                        <em class="s-flex">{{ 'product_warning_enabled' | translate }}</em>
+                        <button type="button" class="bttn green" ng-click="toggleActive($event)">{{ 'enabled_product' | translate }}</button>
+                    </div>
+                </fieldset>
+
+                <fieldset *ngIf="claimService.hasPermission('products.delete') && state.isEditing">
+                    <div class="row-wrap">
+                        <em class="danger s-flex">{{ 'product_warning_delete' | translate }}</em>
+                        <button type="button" class="bttn red" ng-click="delete($event)">{{ 'delete_product' | translate }}</button>
+                    </div>
+                </fieldset>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

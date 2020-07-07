@@ -1,0 +1,73 @@
+<button class="bttn icon close" type="button" (click)="close()">
+    <mat-icon>close</mat-icon>
+</button>
+
+<mat-tab-group [(selectedIndex)]="selectedIndex">
+    <mat-tab>
+        <div class="account-details">
+
+            <div class="header">
+                <div class="wrapper">
+                    <div class="text">
+                        <div>{{ oidcUser?.name_to_show }}</div>
+                        <div>{{ oidcUser?.last_name }}</div>
+                        <div style="text-transform: capitalize;text-align: left;">
+                            <small>{{ oidcUser?.role }}</small>
+                        </div>
+                    </div>
+                    <div class="photo" ng-style="{'background-image': `url(${ session_data.photo })` }"></div>
+                </div>
+            </div>
+
+            <div class="grid">
+                <div class="item" (click)="setTab(1)">
+                    <div class="icon-container red">
+                        <mat-icon class="icon" svgIcon="ser:profile"></mat-icon>
+                    </div>
+                    <div class="name">{{ "edit_profile" | translate }}</div>
+                </div>
+                <div class="item" (click)="setTab(2)">
+                    <div class="icon-container orange">
+                        <mat-icon class="icon" svgIcon="ser:password"></mat-icon>
+                    </div>
+                    <div class="name">{{ "change_password" | translate }}</div>
+                </div>
+                <div class="item" (click)="toggleDarkMode()">
+                    <div class="icon-container blue">
+                        <mat-icon class="icon" svgIcon="ser:contrast"></mat-icon>
+                    </div>
+                    <div class="name">{{ "theme_dark_light" | translate }}</div>
+                </div>
+                <div class="item" (click)="setTab(3)">
+                    <div class="icon-container">
+                        <mat-icon class="icon" svgIcon="ser:linked_accounts"></mat-icon>
+                    </div>
+                    <div class="name">{{ "linked_accounts" | translate }}</div>
+                </div>
+            </div>
+
+            <div class="flex"></div>
+
+            <button type="button" class="bttn" (click)="auth.logout()" style="margin: 16px 0;">
+                <mat-icon style="margin: 0 18px;">exit_to_app</mat-icon>
+                <div class="name">{{ "logout" | translate }}</div>
+            </button>
+
+        </div>
+    </mat-tab>
+    <mat-tab>
+        <button class="bttn icon back" type="button" (click)="setTab(0)">
+            <mat-icon>keyboard_backspace</mat-icon>
+        </button>
+        <app-profile-form></app-profile-form>
+    </mat-tab>
+    <mat-tab>
+        <div class="row start-center" style="padding-left: 24px;">
+            <button class="bttn icon" type="button" (click)="setTab(0)">
+                <mat-icon>keyboard_backspace</mat-icon>
+            </button>
+            <div class="title">{{ "change_password" | translate}}</div>
+        </div>
+        <app-change-password></app-change-password>
+    </mat-tab>
+</mat-tab-group>

@@ -1,0 +1,13 @@
+<!-- <div class="title-container">
+    <div class="title">{{'error' | translate}}</div>
+</div> -->
+
+<div mat-dialog-content class="dialog-content">
+    <div class="container">
+        <div class="image"></div>
+        <div class="sub-title"> {{data.error}} </div>
+    </div>
+</div>
+<div mat-dialog-actions>
+    <button class="cancel-button" mat-button (click)="cancel()">{{'accept' | translate}}</button>
+</div>

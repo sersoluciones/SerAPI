@@ -1,0 +1,9 @@
+<form *ngIf="pagination.showFilters" [formGroup]="filterFG">
+    <h3>{{ 'filters' | translate }}</h3>
+    <div class="row-wrap flex">
+        <ser-form-element class="form-group s-field" *ngFor="let filter of filters">
+            <label>{{ filter.label | translate }}</label>
+            <input serControl *ngIf="filter.type == 'input'" type="text" [formControlName]="filter.field" (keydown.enter)="baseEvents.getList()" />
+        </ser-form-element>
+    </div>
+</form>

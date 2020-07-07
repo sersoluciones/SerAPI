@@ -1,0 +1,116 @@
+<div class="crud-utils">
+    <div class="tools">
+        <div class="title">{{ 'products' | translate }}</div>
+        <crud-toolbar [pagination]="pagination" [state]="state" [filters]="filters" [filterFG]="filterFG"></crud-toolbar>
+        <crud-add-object [permissions]="permissions" [state]="state" label="add_product"></crud-add-object>
+
+        <!--#region Delete All -->
+        <button *ngIf="state.selectedObjects > 0" type="button" class="bttn icon delete" (click)="delete($event)" [disabled]="state.isSaving">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <!--#endregion -->
+
+        <crud-filter-tools [pagination]="pagination" [filters]="filters" [filterFG]="filterFG"></crud-filter-tools>
+    </div>
+</div>
+
+
+<div class="crud-grid-wrapper cards-list" whenScrolled>
+
+    <div *ngIf="objectList.length === 0 && !pagination.gettingMore" class="no-objects">
+        <img class="image" [src]="aws.getS3Url('assets/images/no_product.svg')" alt="">
+        <div class="hint">
+            <div class="text">{{ 'help_add_product' | translate}}</div>
+            <img class="arrow" [src]="aws.getS3Url('assets/icons/common/hint_new.svg')" alt="">
+        </div>
+    </div>
+
+    <div class="item-grid-wrapper" *ngFor="let object of objectList">
+
+        <ng-content *ngIf="object._loading then loading;else card"></ng-content>
+
+        <ng-template #loading>
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer" style="margin: 10px 0 0;"></div>
+            </div>
+        </ng-template>
+
+        <ng-template #card>
+            <div class="content clickable" (click)="editObject(object)">
+
+                <div class="picture" [ngStyle]="{'background-image': object.main_photo ? aws.getS3BgUrl(object.main_photo) : null }"></div>
+
+                <div *ngIf="object.current_quantity === 0" class="sold-out">{{ 'sold_out' | translate}}</div>
+
+                <div class="name">{{ object.name }} </div>
+                <div class="description ellipsis" [title]="object.short_description">{{ object.short_description }}</div>
+                <div class="price"><strong>{{ 'price' | translate }}: </strong> {{ object.price | currency: 'COP': '$ ': '1.0-0' }} </div>
+
+            </div>
+        </ng-template>
+
+    </div>
+
+    <div *ngIf="pagination.gettingMore" class="shimmer-container">
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper">
+            <div class="content">
+                <div class="pic shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+    </div>
+
+</div>

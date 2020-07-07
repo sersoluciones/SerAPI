@@ -224,7 +224,7 @@ namespace SerAPI
                 options.Authority = Configuration.GetSection("IdentityServer")["Authority"];
                 options.SupportedTokens = SupportedTokens.Jwt;
                 options.RequireHttpsMetadata = false; // Note: Set to true in production
-                options.ApiName = "SerAPI_api";
+                options.ApiName = "SerAPI_api"; // TODO: Fill
             });
 
             services.Configure<IdentityOptions>(options =>

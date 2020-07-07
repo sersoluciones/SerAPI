@@ -1,0 +1,12 @@
+<button type="button" *ngIf="!state.maximized; else restore" (click)="toggleWindow()" [title]="'maximize_window' | translate">
+    <mat-icon>fullscreen</mat-icon>
+</button>
+<ng-template #restore>
+    <button type="button" (click)="toggleWindow()" [title]="'restore_window' | translate">
+        <mat-icon>fullscreen_exit</mat-icon>
+    </button>
+</ng-template>
+
+<button type="button" (click)="hide.emit()" class="close" [disabled]="state.isSaving" [title]="'close' | translate">
+    <mat-icon>close</mat-icon>
+</button>

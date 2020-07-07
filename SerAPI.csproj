@@ -5,6 +5,28 @@
 		<UserSecretsId>aspnet-SerAPI-54F8499D-D802-4B6A-981B-CC7735119D00</UserSecretsId>
 	</PropertyGroup>
 
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Proggresi' ">
+    <StartAction>Project</StartAction>
+    <ExternalConsole>true</ExternalConsole>
+    <ApplicationURL>http://localhost:5002</ApplicationURL>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaRoot)**" />
+    <None Remove="$(SpaRoot)**" />
+    <None Include="$(SpaRoot)**" Exclude="$(SpaRoot)node_modules\**" />
+    <Content Remove="ClientApp\e2e\tsconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Don't publish the SPA source files, but do show them in the project files list -->
+    <Content Remove="$(SpaAuthRoot)**" />
+    <None Remove="$(SpaAuthRoot)**" />
+    <None Include="$(SpaAuthRoot)**" Exclude="$(SpaAuthRoot)node_modules\**" />
+    <Content Remove="AuthApp\e2e\tsconfig.json" />
+  </ItemGroup>
+
 	<ItemGroup>
 		<PackageReference Include="Google.Apis.Auth" Version="1.45.0" />
 		<PackageReference Include="EPPlus" Version="5.1.1" />

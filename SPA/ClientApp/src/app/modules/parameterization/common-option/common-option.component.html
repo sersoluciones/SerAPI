@@ -1,0 +1,116 @@
+<div class="crud-utils">
+    <div class="tools">
+        <div class="title">{{ 'common_options' | translate }}</div>
+        <crud-toolbar [pagination]="pagination" [state]="state" [filters]="filters" [filterFG]="filterFG"></crud-toolbar>
+        <crud-add-object [permissions]="permissions" [state]="state" label="add_common_option"></crud-add-object>
+        <crud-edit-tools [permissions]="permissions" [state]="state" [objectList]="objectList"></crud-edit-tools>
+
+        <!--#region Delete All -->
+        <button *ngIf="state.selectedObjects > 0" type="button" class="bttn icon delete" (click)="delete($event)" [disabled]="state.isSaving">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <!--#endregion -->
+
+        <crud-filter-tools [pagination]="pagination" [filters]="filters" [filterFG]="filterFG"></crud-filter-tools>
+    </div>
+</div>
+
+<div class="crud-headers">
+    <div class="checkbox-space"></div>
+    <div class="headers">
+        <strong class="s-flex">{{ 'type' | translate }}</strong>
+        <strong class="s-flex">{{ 'value' | translate }}</strong>
+        <strong class="s-50">{{ 'description' | translate }}</strong>
+    </div>
+</div>
+
+<div class="crud-wrapper" whenScrolled>
+
+    <div class="item-wrapper start-center s-100" *ngFor="let object of objectList?.controls">
+
+        <div class="content">
+
+            <ng-container [formGroup]="object">
+
+                <mat-checkbox *ngIf="claimService.hasPermission('commonoptions.delete') && !state.isSaving" formControlName="_isSelected" (change)="toggleSelected()"></mat-checkbox>
+
+                <div *ngIf="state.isSaving" class="row flex">
+                    <div class="checkbox-space"></div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                    <div class="form-group s-50">
+                        <div class="text shimmer"></div>
+                    </div>
+                </div>
+
+                <div *ngIf="!state.isSaving" class="row-wrap start-center s-flex">
+
+                    <ser-form-element *ngIf="state.formMode" class="s-flex" plain>
+                        <input serControl formControlName="type" maxlength="50" />
+
+                        <div serErrors="type">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-flex" plain>
+                        {{ object.get('type').value }}
+                    </div>
+
+                    <ser-form-element *ngIf="state.formMode" class="s-flex" plain>
+                        <input serControl formControlName="value" maxlength="255" />
+
+                        <div serErrors="value">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-flex" plain>
+                        {{ object.get('value').value }}
+                    </div>
+
+                    <ser-form-element *ngIf="state.formMode" class="s-50" plain>
+                        <input serControl formControlName="description" maxlength="2000" />
+
+                        <div serErrors="description">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-50" plain>
+                        {{ object.get('description').value }}
+                    </div>
+
+                    <div *ngIf="object.value._new" class="new-mark"></div>
+                    <div *ngIf="!object.value._new && object.dirty" class="dirty-mark"></div>
+
+                </div>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+    <div *ngIf="pagination.gettingMore" class="shimmer-container">
+        <div class="item-wrapper item-loader s-100">
+            <div class="content">
+                <div class="checkbox-space"></div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+                <div class="form-group s-50">
+                    <div class="text shimmer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

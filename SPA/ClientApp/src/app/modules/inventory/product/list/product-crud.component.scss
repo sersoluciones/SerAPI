@@ -1,0 +1,110 @@
+@import "~@sersol/ngx/styles/mixins";
+@import "../../../../../style/variables.scss";
+
+:host {
+    .item-grid-wrapper {
+        width: 200px;
+        min-width: 200px;
+        max-width: 200px;
+
+        .content {
+            flex-direction: column;
+            align-items: center;
+            overflow: hidden;
+
+            .name {
+                font-weight: bold;
+                text-align: center;
+                margin-bottom: 0;
+                font-size: rem(14);
+            }
+
+            .picture {
+                margin: 16px 0;
+                width: 120px;
+                height: 150px;
+                background-image: urlS3("assets/images/no_image_available.svg");
+                background-repeat: no-repeat;
+                background-size: cover;
+                background-position: center;
+                border-radius: 16px;
+            }
+
+            .brand {
+                position: absolute;
+                top: 0;
+                left: 0;
+                padding: 4px;
+                background-color: var(--light-grey-2dp);
+                border-bottom-right-radius: 6px;
+                border-top-left-radius: 4px;
+            }
+
+            .sold-out {
+                background-color: red;
+                color: white;
+                position: absolute;
+                left: -22px;
+                top: 15px;
+                transform: rotate(-45deg);
+                padding: 2px 24px;
+                text-transform: uppercase;
+                font-size: rem(7);
+                font-weight: bold;
+            }
+
+            .description {
+                font-size: rem(10);
+                text-align: center;
+            }
+
+            .price {
+                font-size: rem(11);
+                margin-top: 10px;
+                font-style: italic;
+            }
+        }
+
+        .shimmer{
+            &.pic {
+                margin: 16px 0;
+                width: 120px;
+                height: 150px;
+                border-radius: 16px;
+            }
+
+            &.text {
+                height: 15px;
+                width: 100%;
+                margin-bottom: 6px;
+                border-radius: 4px;
+            }
+        }
+    }
+}
+
+.product-select {
+    display: flex;
+    align-items: center;
+
+    .picture {
+        width: 26px;
+        height: 26px;
+        background-image: urlS3("assets/images/no_image_available.svg");
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+        border-radius: 4px;
+        margin-right: 6px;
+    }
+}
+
+.scheme-dark {
+    .product {
+        &.cards-list {
+            .picture {
+                background-image: urlS3("assets/images/no_image_available_dark.svg");
+            }
+        }
+    }
+}

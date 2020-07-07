@@ -1,0 +1,299 @@
+<div class="wizard" [ngClass]="'step-' + step">
+    <div class="sidebar">
+
+        <div class="logo"></div>
+
+        <div class="steps">
+            <div *ngIf="step === 1" class="first">
+                {{ 'wizard_text_1' | translate }}
+
+                <div class="description">
+                    <div>{{ 'wizard_text_2' | translate }}</div>
+                    <div>{{ 'wizard_text_3' | translate }}</div>
+                </div>
+            </div>
+
+            <div *ngIf="step !== 1" class="numbers">
+                <div class="step complete">
+                    <mat-icon>check_circle</mat-icon>
+                    <div class="text">{{ 'bussiness_type' | translate }}</div>
+                </div>
+                <div class="step" [ngClass]="{active: step == 2, complete: step > 2}">
+                    <div class="cont">2</div>
+                    <mat-icon>check_circle</mat-icon>
+                    <div class="text">{{ 'access_data' | translate }}</div>
+                </div>
+                <div class="step" [ngClass]="{active: step == 3, complete: step > 3}">
+                    <div class="cont">3</div>
+                    <mat-icon>check_circle</mat-icon>
+                    <div class="text">{{ 'your_profile' | translate }}</div>
+                </div>
+                <div class="step" [ngClass]="{complete: step === 4}">
+                    <div class="cont">4</div>
+                    <mat-icon>check_circle</mat-icon>
+                    <div class="text">{{ 'completed' | translate }}</div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <form name="RegisterForm" [formGroup]="RegisterForm" class="content">
+
+        <div class="help">
+            {{ 'wizard_help_1' | translate }}
+            <a href="https://proggresi.com/faq/registro" target="_blank">{{ 'wizard_help_2' | translate }}</a>
+        </div>
+
+        <div *ngIf="step === 1" class="step step-1">
+
+            <ser-form-element>
+                <label>{{ 'enter_company_name' | translate }}</label>
+                <input #company_name serControl formControlName="company_name" maxlength="100">
+
+                <div serErrors="company_name">
+                    <div serError="required" when="dirty">{{ 'required' | translate }}</div>
+                </div>
+            </ser-form-element>
+
+            <div class="subtitle">{{ 'sign_up_text_1' | translate }}</div>
+
+            <div class="options">
+                <div class="item cornershop" [ngClass]="{selected: RegisterForm.value.type_company_id === 1}"
+                    (click)="setTypeCompany(1)">
+                    <mat-icon>account_balance</mat-icon>
+                    <div class="name">{{ 'cornershop' | translate }}</div>
+                </div>
+                <div class="item restaurant" [ngClass]="{selected: RegisterForm.value.type_company_id === 2}"
+                    (click)="setTypeCompany(2)">
+                    <mat-icon>local_dining</mat-icon>
+                    <div class="name">{{ 'restaurant' | translate }}</div>
+                </div>
+                <div class="item barbershop" [ngClass]="{selected: RegisterForm.value.type_company_id === 3}"
+                    (click)="setTypeCompany(3)">
+                    <mat-icon>face</mat-icon>
+                    <div class="name">{{ 'barbershop' | translate }}</div>
+                </div>
+                <div class="item bakery" [ngClass]="{selected: RegisterForm.value.type_company_id === 4}"
+                    (click)="setTypeCompany(4)">
+                    <mat-icon>cake</mat-icon>
+                    <div class="name">{{ 'bakery' | translate }}</div>
+                </div>
+                <div class="item coffeeshop" [ngClass]="{selected: RegisterForm.value.type_company_id === 5}"
+                    (click)="setTypeCompany(5)">
+                    <mat-icon>local_cafe</mat-icon>
+                    <div class="name">{{ 'coffeeshop' | translate }}</div>
+                </div>
+            </div>
+            <div class="actions">
+                <button *ngIf="RegisterForm.get('company_name').valid && RegisterForm.get('type_company_id').valid"
+                    class="bttn" type="button" (click)="nextStep()">{{ 'next' | translate }}</button>
+            </div>
+        </div>
+
+        <div *ngIf="step > 1" class="summary">
+            <div class="item" (click)="step = 1">
+                <mat-icon *ngIf="RegisterForm.value.type_company_id === 1">account_balance</mat-icon>
+                <mat-icon *ngIf="RegisterForm.value.type_company_id === 2">local_dining</mat-icon>
+                <mat-icon *ngIf="RegisterForm.value.type_company_id === 3">face</mat-icon>
+                <mat-icon *ngIf="RegisterForm.value.type_company_id === 4">cake</mat-icon>
+                <mat-icon *ngIf="RegisterForm.value.type_company_id === 5">local_cafe</mat-icon>
+                <div class="text" [title]="RegisterForm.value.company_name">{{ RegisterForm.value.company_name }}</div>
+            </div>
+
+            <div *ngIf="RegisterForm.get('email').valid && auth_type" class="item" (click)="step = 2">
+                <img [src]="aws.getS3Url('assets/images/social-buttons/') + 'icon_' + auth_type + '_color.png'" />
+                <div class="text" [title]="RegisterForm.value.email">{{ RegisterForm.value.email }}</div>
+            </div>
+
+            <div *ngIf="RegisterForm.get('name').valid && RegisterForm.get('name').valid" class="item"
+                (click)="step = 2">
+                <img [src]="aws.getS3Url('assets/images/account_circle_dark.svg')" />
+                <div class="text" [title]="RegisterForm.value.name">{{ RegisterForm.value.name }}
+                    {{ RegisterForm.value.last_name }}</div>
+            </div>
+        </div>
+
+        <div *ngIf="step === 2" class="step step-2">
+            <div class="title">{{ 'sign_up_text_2' | translate }}</div>
+
+            <div class="container">
+                <div>
+                    <div class="subtitle">{{ 'sign_up_text_3' | translate }}</div>
+                    <div class="external-sign-in">
+                        <app-google></app-google>
+                        <app-microsoft></app-microsoft>
+                        <app-facebook></app-facebook>
+                    </div>
+                </div>
+
+                <div class="separator"></div>
+
+                <div>
+                    <div class="subtitle">{{ 'sign_up_text_4' | translate }}</div>
+                    <div class="inputs">
+
+                        <div *ngIf="loader">
+                            <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                            <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                            <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                            <div style="height: 24px;"></div>
+                        </div>
+
+                        <div *ngIf="!loader">
+                            <ser-form-element>
+                                <label>{{ 'email' | translate }}</label>
+                                <input serControl name="email" formControlName="email">
+
+                                <div serErrors="email">
+                                    <div serError="required">{{ 'required' | translate }}</div>
+                                    <div serError="pattern">{{ 'email_error' | translate }}</div>
+                                    <div serError="emailTaken">{{ 'email_taken' | translate }}</div>
+                                </div>
+                            </ser-form-element>
+
+                            <ser-form-element>
+                                <label>{{ 'password' | translate }}</label>
+                                <div class="input-group">
+                                    <input serControl type="password" name="password" formControlName="password">
+                                    <span class="addon password" [title]="'toggle_password_visibility' | translate">
+                                        <mat-icon (click)="toggleVisibility($event)">visibility_off</mat-icon>
+                                    </span>
+                                </div>
+
+                                <div serErrors="password">
+                                    <div serError="required">{{ 'required' | translate }}</div>
+                                    <div serError="pattern">{{ 'password_error' | translate: {'min': 6, 'max': 100 } }}
+                                    </div>
+                                </div>
+                            </ser-form-element>
+
+                            <ser-form-element>
+                                <label>{{ 'confirm_password' | translate }}</label>
+                                <div class="input-group">
+                                    <input serControl type="password" name="confirm_password"
+                                        formControlName="confirm_password">
+                                    <span class="addon password" [title]="'toggle_password_visibility' | translate">
+                                        <mat-icon (click)="toggleVisibility($event)">visibility_off</mat-icon>
+                                    </span>
+                                </div>
+
+                                <div serErrors="confirm_password">
+                                    <div serError="required">{{ 'required' | translate }}</div>
+                                    <div serError="match">{{ 'password_match' | translate }}</div>
+                                </div>
+                            </ser-form-element>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="bttn back" (click)="prevStep()" [title]="'back' | translate">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button *ngIf="RegisterForm.get('email').valid && RegisterForm.get('password').valid && RegisterForm.get('confirm_password').valid" class="bttn"
+                    type="button" (click)="nextStep()">{{ 'next' | translate }}</button>
+            </div>
+
+        </div>
+
+        <div *ngIf="step === 3" class="step step-3">
+            <div class="title">{{ 'sign_up_text_5' | translate }}</div>
+
+            <div #dropzone class="dropzone">
+                <ngx-file-drop class="drop" [dropZoneLabel]="'select_image_dialog' | translate"
+                    (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+                    [multiple]="false" [showBrowseBtn]="true" contentClassName="drop-content"
+                    browseBtnClassName="drop-button" browseBtnLabel="" accept="image/*">
+                </ngx-file-drop>
+            </div>
+
+            <div class="container">
+
+                <div>
+                    <div #photoBackground class="photo">
+                        <input type="file" id="photo-profile" accept="image/x-png,image/jpeg"
+                            (change)="viewFile($event)" [disabled]="this.loader">
+                        <label class="select" for="photo-profile">
+                            <mat-icon>photo_camera</mat-icon>
+                        </label>
+                    </div>
+                    <em><small>{{ 'drag_your_photo_here' | translate}}</small></em>
+                </div>
+
+                <div class="inputs">
+
+                    <div *ngIf="loader">
+                        <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                        <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                        <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                        <div style="height: 24px;"></div>
+                    </div>
+
+                    <div *ngIf="!loader">
+
+                        <ser-form-element>
+                            <label>{{ 'names' | translate }}</label>
+                            <div class="input-group">
+                                <input serControl name="name" formControlName="name">
+                            </div>
+
+                            <div serErrors="name">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+
+                        <ser-form-element>
+
+                            <label>{{ 'last_name' | translate }}</label>
+
+                            <div class="input-group">
+                                <input serControl name="last_name" formControlName="last_name">
+                            </div>
+
+                            <div serErrors="last_name">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+
+                        </ser-form-element>
+
+                        <ser-form-element>
+
+                            <label>{{ 'cellphone' | translate }}</label>
+
+                            <div class="input-group">
+                                <input serControl name="phone" formControlName="phone">
+                            </div>
+
+                        </ser-form-element>
+
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="actions">
+                <button type="button" class="bttn back" (click)="prevStep()" [title]="'back' | translate">
+                    <mat-icon>chevron_left</mat-icon>
+                </button>
+                <button *ngIf="RegisterForm.get('name').valid && RegisterForm.get('last_name').valid" class="bttn"
+                    type="button" (click)="submit()">{{ 'finish' | translate }}</button>
+            </div>
+        </div>
+
+        <div *ngIf="step === 4" class="step step-4">
+
+            <div class="title">{{ 'sign_up_text_6' | translate }}</div>
+
+            <div class="container">
+                <ng-lottie [options]="logoOptions" (animationCreated)="animationCreated($event)"></ng-lottie>
+                <a class="bttn button-return" routerLink="/sign-in">{{ 'return_login' | translate }}</a>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

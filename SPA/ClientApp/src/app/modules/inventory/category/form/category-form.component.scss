@@ -1,0 +1,77 @@
+@import '~@sersol/ngx/styles/mixins';
+@import '../../../../../style/variables.scss';
+
+:host {
+
+    .wrapper {
+
+        > form {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            padding: 0 24px 24px;
+            height: calc(100% - 50px);
+
+            .main {
+                display: flex;
+                flex-direction: column;
+                align-items: stretch;
+
+                .img-cropped-wrapper {
+                    width: 100%;
+                    margin: 0;
+                    align-self: center;
+                }
+
+                .bttn {
+                    .mat-icon {
+                        height: 20px;
+                        width: 20px;
+                        font-size: 20px;
+                    }
+
+                    &:not(.icon) {
+                        .mat-icon {
+                            margin-right: 8px;
+                        }
+                    }
+                }
+
+                .name {
+                    font-size: rem(20);
+                    margin-top: 32px;
+                }
+
+                .description {
+                    height: 200px;
+                }
+            }
+
+            .subcategories {
+                padding: 0 0 24px 24px;
+                height: 100%;
+
+                .item-grid-wrapper {
+                    display: flex;
+                    padding-right: 12px;
+
+                    .new-mark,
+                    .dirty-mark {
+                        right: 40px;
+                    }
+
+                    .remove {
+                        color: red;
+                        margin-top: 18px;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+
+    }
+
+    .text.shimmer {
+        margin-top: 32px;
+    }
+}

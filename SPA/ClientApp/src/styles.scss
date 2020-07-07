@@ -1,0 +1,67 @@
+// NGX-UI
+@import '~@sersol/ngx/styles/mixins';
+@import '~@sersol/ngx/styles/colors';
+@import '~@sersol/ngx/styles/typography';
+@import '~@sersol/ngx/styles/layout';
+@import '~@sersol/ngx/styles/form';
+@import '~@sersol/ngx/styles/button';
+
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@import '~@angular/material/theming';
+$custom-typography: mat-typography-config(
+  $font-family: $font-family
+);
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@include mat-core($custom-typography);
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+$ClientApp-primary: mat-palette($mat-indigo);
+$ClientApp-accent: mat-palette($mat-pink, A200, A100, A400);
+
+// The warn palette is optional (defaults to red).
+$ClientApp-warn: mat-palette($mat-red);
+
+// Create the theme object (a Sass map containing all of the palettes).
+$ClientApp-theme: mat-light-theme($ClientApp-primary, $ClientApp-accent, $ClientApp-warn);
+
+// Include theme styles for core and each component used in your app.
+// Alternatively, you can import and @include the theme mixins for each component
+// that you are using.
+@include angular-material-theme($ClientApp-theme);
+
+// App
+@import './style/main.scss';
+@import './style/sidenav.scss';
+@import './style/crud.scss';
+@import './style/sub-crud.scss';
+@import './style/tab.scss';
+@import './style/form.scss';
+@import './style/loader.scss';
+@import './style/dialog.scss';
+@import './style/animations.scss';
+@import './style/variables.scss';
+
+/* You can add global styles to this file, and also import other style files */
+
+/* :root {
+  --primary-color: #{ $primary_color };
+  --primary-color-rgb: #{toRGB($primary_color)};
+} */
+
+body {
+    background-color: var(--light-grey-0dp);
+
+    &.scheme-dark {
+        background-color: var(--dark-grey-0dp);
+    }
+}
+
+// Styles leaflet
+@import "~leaflet/dist/leaflet.css";

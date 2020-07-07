@@ -1,0 +1,9 @@
+<div class="title">{{ data.title | translate }}</div>
+<div class="message">
+    <ul>
+        <li *ngFor="let item of data.errors">{{ item }}</li>
+    </ul>
+</div>
+<div mat-dialog-actions>
+  <button class="bttn" (click)="close()">{{ 'close' | translate }}</button>
+</div>

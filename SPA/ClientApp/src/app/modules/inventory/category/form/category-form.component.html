@@ -1,0 +1,128 @@
+<div class="wrapper">
+
+    <div class="tools">
+        <div *ngIf="!state.loading" class="controls">
+            <button type="button" class="bttn icon" [disabled]="modelForm.pristine || state.isSaving" (click)="undo()" [title]="'undo' | translate">
+                <mat-icon>undo</mat-icon>
+            </button>
+
+            <button type="submit" class="bttn icon green" [disabled]="modelForm.invalid || state.isSaving" (click)="submit()" [title]="'save' | translate">
+                <mat-icon style="color: green;">save</mat-icon>
+            </button>
+        </div>
+
+        <div class="message">{{ getMessage() | translate }}</div>
+
+        <window-controls [state]="state" [dialogRef]="dialogRef"></window-controls>
+    </div>
+
+    <form [formGroup]="modelForm">
+
+        <div class="s-30 main">
+            <ng-content *ngIf="(state.loading || state.isSaving) then mainCP; else mainform"></ng-content>
+
+            <ng-template #mainCP>
+                <div class="text shimmer" style="height: 50px;"></div>
+                <div class="text shimmer" style="height: 192px;"></div>
+            </ng-template>
+
+            <ng-template #mainform>
+
+                <div class="img-cropped-wrapper" [ngClass]="{'has-value': checkFile(1, 'attachment')}">
+
+                    <label class="bttn-upload" [title]="checkFile(1, 'attachment') ? ('change_image' | translate): ''">
+                        <span>{{ 'image_upload' | translate }}</span> <mat-icon>cloud_upload</mat-icon>
+                        <input type="file" (change)="setFile($event, 'attachment')">
+                    </label>
+
+                    <div class="preview" [bgImage]="{url: instance?.attachment?.key4, file: this.modelForm.get('attachment').value}"></div>
+
+                    <button type="button" class="clean-file" (click)="clearFile('attachment')" [title]="'delete_file' | translate">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+
+                    <div serErrors="attachment">
+                        <div serError="requiredFileType">{{ 'only_allowed_images' | translate: {formats: 'png, jpg, gif'} }}</div>
+                        <div serError="maxFileSize">{{ 'max_size_allowed' | translate: {formats: 'png, jpg, gif'} }}</div>
+                    </div>
+                </div>
+
+                <ser-form-element class="name">
+                    <label>{{ 'name' | translate }}</label>
+                    <input serControl formControlName="name" maxlength="150" />
+
+                    <div serErrors="name">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+
+                <ser-form-element class="description">
+                    <label>{{ 'description' | translate }}</label>
+                    <textarea serControl formControlName="description" maxlength="150"></textarea>
+                </ser-form-element>
+            </ng-template>
+        </div>
+
+        <div class="s-flex subcategories">
+            <div class="subcrud">
+                <div class="subcrud-utils">
+                    <div class="subtitle">{{ 'subcategories' | translate }}</div>
+                    <div class="flex"></div>
+                    <button type="button" class="bttn" (click)="addSubcategory()" [disabled]="state.loading || state.isSaving">
+                        <mat-icon>add</mat-icon> {{ 'add' | translate }}
+                    </button>
+                </div>
+
+                <ng-content *ngIf="(state.loading || state.isSaving) then subCP;else subForm"></ng-content>
+
+                <ng-template #subCP>
+                    <div class="subcrud-grid-wrapper">
+                        <div class="item-grid-wrapper s-50">
+                            <div class="input shimmer"></div>
+                        </div>
+                        <div class="item-grid-wrapper s-50">
+                            <div class="input shimmer"></div>
+                        </div>
+                        <div class="item-grid-wrapper s-50">
+                            <div class="input shimmer"></div>
+                        </div>
+                        <div class="item-grid-wrapper s-50">
+                            <div class="input shimmer"></div>
+                        </div>
+                        <div class="item-grid-wrapper s-50">
+                            <div class="input shimmer"></div>
+                        </div>
+                        <div class="item-grid-wrapper s-50">
+                            <div class="input shimmer"></div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #subForm>
+                    <div class="subcrud-grid-wrapper">
+                        <div class="item-grid-wrapper s-50" *ngFor="let item of getSubcategories(); let i = index">
+                            <ng-container [formGroup]="item">
+                                <ser-form-element class="flex">
+                                    <label>{{ 'name' | translate }}</label>
+                                    <input serControl formControlName="name" maxlength="150" />
+
+                                    <div serErrors="name">
+                                        <div serError="required">{{ 'required' | translate }}</div>
+                                    </div>
+                                </ser-form-element>
+                            </ng-container>
+
+                            <div *ngIf="item.value._new" class="new-mark"></div>
+                            <div *ngIf="!item.value._new && item.dirty" class="dirty-mark"></div>
+
+                            <mat-icon class="remove" (click)="deleteSubcategory(i)">close</mat-icon>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+        </div>
+
+    </form>
+
+</div>

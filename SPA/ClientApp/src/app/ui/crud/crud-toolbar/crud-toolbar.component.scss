@@ -1,0 +1,54 @@
+@import "~@sersol/ngx/styles/mixins";
+@import "../../../../style/variables.scss";
+
+:host {
+    display: flex;
+    flex: 1;
+    align-items: center;
+
+    .search {
+        flex: 0 0 auto;
+        margin: 0 8px 0 0;
+        display: flex;
+        align-items: center;
+
+        mat-icon {
+            color: #dedede;
+        }
+
+        input {
+            position: relative;
+            -webkit-box-flex: 1;
+            -ms-flex: 1;
+            flex: 1;
+            margin: 0 4px;
+            border-radius: 0;
+            width: calc(100% - 24px);
+            padding: 6px 12px;
+            font-family: inherit;
+            font-size: rem(11);
+            color: rgba(0, 0, 0, 0.7);
+            background-color: transparent;
+            transition: background-color 500ms;
+            background-image: none;
+            background-clip: padding-box;
+            border: none;
+            outline: none;
+            -webkit-appearance: none;
+            border-left: 1px solid #dedede;
+        }
+    }
+
+    .row-count {
+        margin-left: 12px;
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        flex: 0 0 auto;
+        font-size: rem(10);
+
+        ::ng-deep strong {
+            margin: 0 4px;
+        }
+    }
+}

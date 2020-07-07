@@ -1,0 +1,171 @@
+<div class="wrapper">
+
+    <div class="tools">
+        <div *ngIf="!state.loading" class="controls">
+            <button type="button" class="bttn icon" [disabled]="modelForm.pristine || state.isSaving" (click)="undo()" [title]="'undo' | translate">
+                <mat-icon>undo</mat-icon>
+            </button>
+
+            <button type="submit" class="bttn icon green" [disabled]="modelForm.invalid || state.isSaving" (click)="submit()" [title]="'save' | translate">
+                <mat-icon style="color: green;">save</mat-icon>
+            </button>
+        </div>
+
+        <div class="message">{{ getMessage() | translate }}</div>
+
+        <window-controls [state]="state" [dialogRef]="dialogRef"></window-controls>
+    </div>
+
+    <form name="ModelForm" [formGroup]="modelForm">
+
+        <div class="s-30 main">
+            <ng-content *ngIf="(state.loading || state.isSaving) then mainCP; else mainform"></ng-content>
+
+            <ng-template #mainCP>
+                <div class="text shimmer" style="height: 50px;"></div>
+            </ng-template>
+
+            <ng-template #mainform>
+                <ser-form-element class="name">
+                    <label>{{ 'name' | translate }}</label>
+                    <input serControl name="name" formControlName="name">
+
+                    <div serErrors="name">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+            </ng-template>
+
+
+        </div>
+
+        <div class="s-flex editor-wrapper">
+            <div class="form-group" plain>
+                <div class="input-group">
+                    <span class="addon">{{ 'filter' | translate }}</span>
+                    <input name="search" [(ngModel)]="modelFilter" [ngModelOptions]="{standalone: true}"/>
+                </div>
+            </div>
+
+            <div class="editor">
+
+                <ng-content *ngIf="(state.loading || state.isSaving) then permCP;else permForm"></ng-content>
+
+                <ng-template #permForm>
+                    <div class="container s-50" *ngFor="let module of modelAux.permissionWrapper | filterArray:modelFilter:'Label'">
+
+                        <div class="permissions">
+
+                            <div class="row start-center clickable" (click)="module.IsExpanded = !module.IsExpanded">
+                                <mat-icon *ngIf="module.IsExpanded">keyboard_arrow_down</mat-icon>
+                                <mat-icon *ngIf="!module.IsExpanded">keyboard_arrow_right</mat-icon>
+
+                                <span class="group-label">{{module.Label}}</span>
+
+                                <div class="flex"></div>
+                                <mat-icon *ngIf="module.IsAdmin" [title]="'perms_admin' | translate">supervised_user_circle</mat-icon>
+                            </div>
+
+                            <div class="permission-module" *ngIf="module.IsExpanded">
+
+                                <div class="perms" style="border-left: 2px solid grey;">
+
+                                    <div *ngFor="let perm of module.Permissions" class="single-perm" [title]="perm.Value">
+
+                                        <mat-checkbox [(ngModel)]="perm.Selected" [ngModelOptions]="{standalone: true}" [title]="perm.Label">{{ perm.Label }}</mat-checkbox>
+
+                                        <div class="flex"></div>
+                                        <mat-icon *ngIf="perm.IsAdmin" [title]="'perms_admin' | translate">supervised_user_circle</mat-icon>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="permissions" *ngFor="let group of module.Groups; let $last = last;">
+
+                                    <div *ngIf="$last" class="connector-vl"></div>
+                                    <div *ngIf="!$last" class="connector-v"></div>
+                                    <div class="connector-h"></div>
+
+                                    <div class="row start-center clickable" (click)="group.IsExpanded = !group.IsExpanded">
+                                        <mat-icon *ngIf="group.IsExpanded">keyboard_arrow_down</mat-icon>
+                                        <mat-icon *ngIf="!group.IsExpanded">keyboard_arrow_right</mat-icon>
+                                        <span class="group-label">{{ group.Label }}</span>
+
+                                        <div class="flex"></div>
+                                        <mat-icon *ngIf="group.IsAdmin" [title]="'perms_admin' | translate">supervised_user_circle</mat-icon>
+                                    </div>
+
+                                    <div *ngIf="group.IsExpanded" class="perms">
+
+                                        <div *ngFor="let perm of group.Permissions; let index = index;" class="single-perm" [title]="perm.Value">
+
+                                            <mat-checkbox [(ngModel)]="perm.Selected" [ngModelOptions]="{standalone: true}" [title]="perm.Label">{{ perm.Label }}</mat-checkbox>
+
+                                            <div class="flex"></div>
+                                            <mat-icon *ngIf="perm.IsAdmin" [title]="'perms_admin' | translate">supervised_user_circle</mat-icon>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </ng-template>
+
+                <ng-template #permCP>
+                    <div>
+                        <div class="item-loader">
+                            <div class="content">
+                                <div class="card shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="item-loader">
+                            <div class="content">
+                                <div class="card shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="item-loader">
+                            <div class="content">
+                                <div class="card shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="item-loader">
+                            <div class="content">
+                                <div class="card shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="item-loader">
+                            <div class="content">
+                                <div class="card shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="item-loader">
+                            <div class="content">
+                                <div class="card shimmer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </div>
+        </div>
+
+    </form>
+
+</div>

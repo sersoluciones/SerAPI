@@ -1,0 +1,115 @@
+@import '~@sersol/ngx/styles/mixins';
+@import '../../../style/variables.scss';
+
+:host {
+    position: fixed;
+    right: -350px;
+    z-index: 3;
+    width: 300px;
+    height: 100%;
+    background-color: var(--light-grey-1dp);
+    transition: right 250ms cubic-bezier(.25,.8,.25,1);
+
+    &.show {
+        right: 0;
+        transition: right 250ms cubic-bezier(.25,.8,.25,1);
+    }
+
+    .back {
+        position: absolute;
+        left: 24px;
+        top: 18px;
+        z-index: 1;
+    }
+
+
+    .account-details {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: urlS3('assets/images/account_bg.svg') no-repeat left top;
+        background-size: 185px;
+
+        .header {
+            display: flex;
+            position: relative;
+            height: 96px;
+            margin: 0 8px 8px;
+            border-radius: 12px;
+
+            .wrapper {
+                display: flex;
+                width: 100%;
+                align-items: center;
+                max-height: 70px;
+                padding-top: 8px;
+
+                .text {
+                    font-size: rem(13);
+                    padding: 0 16px;
+                    flex: 1;
+                }
+
+                .photo {
+                    min-width: 75px;
+                    max-width: 75px;
+                    height: 75px;
+                    border: 10px solid #d6d6d6;
+                    border-bottom-left-radius: 8px;
+                    border-bottom-right-radius: 8px;
+                    background-color: white;
+                    background-image: urlS3('assets/images/account_circle_dark.svg');
+                    background-repeat: no-repeat;
+                    background-size: cover;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: absolute;
+                    right: 0;
+                    top: -10px;
+                }
+            }
+        }
+
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+            margin-top: 16px;
+            justify-content: center;
+
+            .item{
+                text-decoration: none;
+                color: inherit;
+                width: 50%;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                box-sizing: border-box;
+                padding: 16px;
+            }
+        }
+
+        .all-users {
+            md-icon {
+                overflow: hidden;
+                border-radius: 8px;
+                margin: 0 12px 0 0;
+            }
+        }
+    }
+
+    .form-profile {
+        height: 100%;
+
+        form {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 42px);
+        }
+    }
+}
+
+:host-context(.scheme-dark) {
+    background-color: var(--dark-grey-1dp);
+}

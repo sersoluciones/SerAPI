@@ -1,0 +1,84 @@
+<div class="wrapper">
+
+    <div class="tools">
+        <div *ngIf="!state.loading" class="controls">
+            <button type="button" class="bttn icon" [disabled]="modelForm.pristine || state.isSaving" (click)="undo()" [title]="'undo' | translate">
+                <mat-icon>undo</mat-icon>
+            </button>
+
+            <button type="submit" class="bttn icon green" [disabled]="modelForm.invalid || state.isSaving" (click)="submit()" [title]="'save' | translate">
+                <mat-icon style="color: green;">save</mat-icon>
+            </button>
+        </div>
+
+        <div class="message">{{ getMessage() | translate }}</div>
+
+        <window-controls [state]="state" [dialogRef]="dialogRef"></window-controls>
+    </div>
+
+    <form [formGroup]="modelForm">
+
+        <div class="s-45 map-container">
+            <div class="map" #map id="map"></div>
+            <em><small>{{'store_help_1' | translate}}</small></em>
+        </div>
+
+        <div class="s-flex main">
+            
+            <ng-content *ngIf="(state.loading || state.isSaving) then mainCP; else mainform"></ng-content>
+
+            <ng-template #mainCP>
+                <div class="text shimmer" style="height: 50px;"></div>
+                <div class="text shimmer" style="height: 192px;"></div>
+            </ng-template>
+
+            <ng-template #mainform>
+
+                <ser-form-element class="name">
+                    <label>{{ 'name' | translate }}</label>
+                    <input serControl formControlName="name" maxlength="150" />
+
+                    <div serErrors="name">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+
+                <ser-form-element class="address">
+                    <label>{{ 'address' | translate }}</label>
+                    <input serControl formControlName="address" maxlength="150" />
+
+                    <div serErrors="address">
+                        <div serError="required">{{ 'required' | translate }}</div>
+                    </div>
+                </ser-form-element>
+
+                <div class="row">
+                    <select serControl formControlName="city_id" class="city s-50">
+                        <option *ngFor="let city of cities" [value]="city.id"> {{ city.name }} </option>
+                    </select>
+    
+                    <ser-form-element class="code s-50">
+                        <label>{{ 'code' | translate }}</label>
+                        <input serControl formControlName="code"/>
+                    </ser-form-element>
+                </div>
+                
+                <div class="row">
+                    <ser-form-element class="latitude s-50">
+                        <label>{{ 'latitude' | translate }}</label>
+                        <input type="number" serControl formControlName="latitude" (change)="changeCoordinates()"/>
+                    </ser-form-element>
+    
+                    <ser-form-element class="longitude s-50">
+                        <label>{{ 'longitude' | translate }}</label>
+                        <input type="number" serControl formControlName="longitude" (change)="changeCoordinates()"/>
+                    </ser-form-element>
+                </div>
+
+            </ng-template>
+
+        </div>
+
+    </form>
+
+</div>

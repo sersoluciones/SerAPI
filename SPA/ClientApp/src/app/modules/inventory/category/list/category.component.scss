@@ -1,0 +1,56 @@
+@import '~@sersol/ngx/styles/mixins';
+@import '../../../../../style/variables.scss';
+
+:host {
+    .crud-grid-wrapper {
+        .item-grid-wrapper {
+
+            &.item-loader {
+                padding: 16px;
+
+                .content {
+                    padding: 16px;
+                }
+            }
+
+            .content {
+                padding: 0;
+                min-height: 50px;
+                display: flex;
+                align-items: stretch;
+                overflow: hidden;
+
+                mat-checkbox:last-of-type {
+                    padding: 0 16px;
+                    margin: 0;
+                    height: 50px;
+                    display: flex;
+                }
+
+                .name {
+                    padding: 0 16px;
+                    font-size: rem(13);
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-end;
+                    cursor: pointer;
+                }
+
+                .attachment-photo {
+                    width: 50px;
+                    background-size: cover;
+                    position: relative;
+                    background-image: urlS3("assets/images/no_image_available.svg");
+
+                    &::before {
+                        content: '';
+                        position: absolute;
+                        height: 100%;
+                        width: 100%;
+                        background: linear-gradient(to right, white 0%, rgba(255, 255, 255, 0.5) 30%, rgba(255, 255, 255, 0) 100%);
+                    }
+                }
+            }
+        }
+    }
+}

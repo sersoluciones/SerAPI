@@ -1,0 +1,27 @@
+<div class="sidebar-show" (click)="openSidebar()">
+    <mat-icon>menu</mat-icon>
+</div>
+
+<div class="flex"></div>
+
+<div class="utils">
+
+    <button class="bttn icon shortcuts" type="button" (click)="openFavorites()" [title]="'favorites' | translate">
+        <mat-icon style="color: #fdc800;">star</mat-icon>
+    </button>
+
+    <button class="bttn icon shortcuts" type="button" (click)="openNotifications()" [title]="'notifications' | translate">
+        <!-- <div class="unread"></div> -->
+        <mat-icon>notifications</mat-icon>
+    </button>
+
+    <button class="bttn user" [title]="'clic_more_options' | translate" (click)="openProfile()">
+
+        <!-- @await Html.PartialAsync("Holiday") -->
+
+        <div class="photo"></div>
+
+        <div class="name" [title]="oidcUser?.name_to_show" [innerHTML]="'hi_name' | translate: {name: oidcUser?.name_to_show}"></div>
+    </button>
+
+</div>

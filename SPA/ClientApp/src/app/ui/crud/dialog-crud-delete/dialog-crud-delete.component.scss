@@ -1,0 +1,41 @@
+@import "~@sersol/ngx/styles/mixins";
+@import "../../../../style/variables.scss";
+
+:host {
+    display: flex;
+
+    .img {
+        width: 183px;
+        height: 300px;
+        margin-right: 54px;
+        background-image: urlS3('assets/images/dialog/delete_xl.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+
+    .content {
+        display: flex;
+        flex-direction: column;
+
+        .title {
+            font-size: rem(15);
+        }
+
+        .subtitle {
+            color: red;
+            margin-top: 16px;
+        }
+
+        .message {
+            margin: 24px;
+            flex: 1;
+            max-height: 300px;
+            overflow: auto;
+        }
+
+        .mat-dialog-actions {
+            justify-content: flex-end;
+        }
+    }
+}

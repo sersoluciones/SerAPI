@@ -1,0 +1,146 @@
+@import '~@sersol/ngx/styles/mixins';
+@import '../../../../../style/variables.scss';
+
+:host {
+    .wrapper {
+
+        > form {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            height: calc(100% - 50px);
+
+            .main {
+                padding: 16px;
+                width: 295px;
+                display: flex;
+                flex-direction: column;
+
+                ser-form-element:not([plain]) {
+                    margin-top: 8px;
+                }
+
+                input {
+                    text-align: right;
+                }
+
+                .discount-price {
+                    display: flex;
+                    justify-content: space-between;
+                    padding: 0 0 16px 8px;
+
+                    ser-form-element {
+                        margin-top: 0;
+                        width: 150px;
+                    }
+
+                    mat-checkbox {
+                        padding-top: 1px;
+                    }
+                }
+            }
+
+            .photos {
+                height: 250px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+
+                .preview {
+                    height: 200px;
+                    width: 200px;
+                    border-radius: 6px;
+                    background-image: urlS3('assets/images/no_image_available.svg');
+                    background-position: center;
+                    background-repeat: no-repeat;
+                    background-size: contain;
+                }
+
+                .file-tools {
+                    display: flex;
+                    align-items: center;
+                    margin-top: 8px;
+
+                    > * {
+                        margin: 0 4px 0 0;
+                        cursor: pointer;
+                    }
+
+                    .add {
+                        width: 35px;
+                        height: 35px;
+                        border: 2px dotted grey;
+                        border-radius: 6px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                    }
+
+                    .added {
+                        width: 35px;
+                        height: 35px;
+                        border-radius: 6px;
+                        background-image: urlS3('assets/images/no_image_available.svg');
+                        background-position: center;
+                        background-repeat: no-repeat;
+                        background-size: contain;
+                    }
+                }
+            }
+
+            .subtitle {
+                font-size: rem(16);
+                margin: 20px 0;
+                border-bottom: 1px solid var(--light-grey-2dp);
+            }
+
+            .content {
+                flex: 1;
+                padding-right: 16px;
+                height: 100%;
+                overflow: hidden auto;
+
+                ::ng-deep .mat-tab-header {
+                    display: none;
+                }
+
+                .basic-data {
+                    animation: opac 500ms linear;
+                }
+
+                .settings {
+                    animation: opac 500ms linear;
+
+                    fieldset {
+                        margin-top: 16px;
+
+                        em {
+                            font-size: rem(10);
+                        }
+                    }
+                }
+            }
+
+            .form-group,
+            ser-form-element {
+                &.name {
+                    input {
+                        font-size: rem(17);
+                        min-height: 35px;
+                        max-height: 35px;
+                        height: 35px;
+                    }
+
+                    [serErrors] {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+
+    ::ng-deep .ck-editor__editable_inline {
+        min-height: 300px;
+        max-height: 400px;
+    }
+}

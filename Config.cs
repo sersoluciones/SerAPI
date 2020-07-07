@@ -15,8 +15,8 @@ namespace SerAPI
               {
                 new ApiResource
                 {
-                    Name = "ser_api",
-                    Description = "Ser API",                    
+                    Name = "ser_api", //TODO Replace
+                    Description = "Ser API",  // TODO: Replace                   
                       // include the following using claims in access token (in addition to subject id)
                     //UserClaims = { JwtClaimTypes.Name, JwtClaimTypes.Email, JwtClaimTypes.Role },
 
@@ -31,11 +31,11 @@ namespace SerAPI
                 //////////////////////////////////////////
                  new Client
                 {
-                    ClientId = "third_Ser_client",
+                    ClientId = "third_Ser_client", // TODO: Replace
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256())
+                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256()) // TODO: Fill
                     },
                     AllowedGrantTypes = { "delegation" },
                     AllowOfflineAccess = true,
@@ -44,7 +44,7 @@ namespace SerAPI
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "ser_api.full_access",
+                        "ser_api.full_access", // TODO: Replace
                         "roles"
                     },
 
@@ -64,11 +64,11 @@ namespace SerAPI
                 //////////////////////////////////////////
                 new Client
                 {
-                    ClientId = "Ser_client",
+                    ClientId = "Ser_client", // TODO: Replace
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256())
+                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256()) // TODO: Fill
                     },
                     IncludeJwtId = false,
                     AlwaysIncludeUserClaimsInIdToken = false,
@@ -81,7 +81,7 @@ namespace SerAPI
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Email,
                         IdentityServerConstants.StandardScopes.Profile,
-                        "ser_api.full_access",
+                        "ser_api.full_access", // TODO: Replace
                         "roles"
                     },
 
@@ -94,11 +94,11 @@ namespace SerAPI
 
                 new Client
                 {
-                    ClientId = "crendentials_Ser_client",
+                    ClientId = "crendentials_Ser_client", // TODO: Replace
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256())
+                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256()) // TODO: Fill
                     },
 
                     AccessTokenLifetime = 120,
@@ -106,7 +106,7 @@ namespace SerAPI
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowedScopes =
                     {
-                        "ser_api.read_only"
+                        "ser_api.read_only" // TODO: Replace
                     }
                 },
             };

@@ -1,0 +1,11 @@
+﻿@import '~@sersol/ngx/styles/mixins';
+@import './variables.scss';
+
+.tab-headers {
+    justify-content: center;
+    margin: 16px 0;
+
+    .bttn {
+        height: 30px;
+    }
+}

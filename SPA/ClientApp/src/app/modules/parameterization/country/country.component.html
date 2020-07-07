@@ -1,0 +1,151 @@
+<div class="crud-utils">
+    <div class="tools">
+        <div class="title">{{ 'countries' | translate }}</div>
+        <crud-toolbar [pagination]="pagination" [state]="state" [filters]="filters" [filterFG]="filterFG"></crud-toolbar>
+        <crud-add-object [permissions]="permissions" [state]="state" label="add_country"></crud-add-object>
+        <crud-edit-tools [permissions]="permissions" [state]="state" [objectList]="objectList"></crud-edit-tools>
+
+        <!--#region Delete All -->
+        <button *ngIf="state.selectedObjects > 0" type="button" class="bttn icon delete" (click)="delete($event)" [disabled]="state.isSaving">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <!--#endregion -->
+
+        <crud-filter-tools [pagination]="pagination" [filters]="filters" [filterFG]="filterFG"></crud-filter-tools>
+    </div>
+</div>
+
+<div class="crud-headers">
+    <div class="checkbox-space"></div>
+    <div class="headers">
+        <strong style="width: 40px;"></strong>
+        <strong class="s-flex">{{ 'name' | translate }}</strong>
+        <strong class="s-flex">ISO 3166-1 alfa-2</strong>
+        <strong class="s-flex">ISO 3166-1 alfa-3</strong>
+        <strong class="s-flex">ISO 3166-1 númerico</strong>
+        <strong *ngIf="claimService.hasPermission('countries.update')" class="s-flex"></strong>
+    </div>
+</div>
+
+<div class="crud-wrapper" whenScrolled>
+
+    <div class="item-wrapper start-center s-100" *ngFor="let object of objectList?.controls">
+
+        <div class="content">
+
+            <ng-container [formGroup]="object">
+
+                <mat-checkbox *ngIf="claimService.hasPermission('countries.delete') && !state.isSaving" formControlName="_isSelected" (change)="toggleSelected()"></mat-checkbox>
+
+                <div *ngIf="state.isSaving" class="row flex">
+                    <div class="checkbox-space"></div>
+                    <div class="text shimmer" style="width: 32px;height: 32px;margin-right: 8px;"></div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                    <div class="form-group s-flex">
+                        <div class="text shimmer"></div>
+                    </div>
+                </div>
+
+                <div *ngIf="!state.isSaving" class="row-wrap start-center s-flex">
+
+                    <div class="country-flag" style="width: 32px;height: 32px;" [style]="{ 'background-image': 'url(' + aws.getS3Url('assets/icons/flags/svg/' + object.get('code_1').value + '.svg') + ')'}"></div>
+
+                    <ser-form-element *ngIf="state.formMode" class="s-flex" plain>
+                        <input serControl formControlName="name_es" maxlength="100" />
+
+                        <div serErrors="name_es">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-flex" plain>
+                        {{ object.get('name_es').value }}
+                    </div>
+
+                    <ser-form-element *ngIf="state.formMode" class="s-flex" plain>
+                        <input serControl formControlName="code_1" maxlength="2" />
+
+                        <div serErrors="code_1">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-flex" plain>
+                        {{ object.get('code_1').value }}
+                    </div>
+
+                    <ser-form-element *ngIf="state.formMode" class="s-flex" plain>
+                        <input serControl formControlName="code_2" maxlength="3" />
+
+                        <div serErrors="code_2">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-flex" plain>
+                        {{ object.get('code_2').value }}
+                    </div>
+
+                    <ser-form-element *ngIf="state.formMode" class="s-flex" plain>
+                        <input serControl formControlName="code_3" maxlength="20" />
+
+                        <div serErrors="code_3">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+
+                    <div *ngIf="!state.formMode" class="form-group s-flex" plain>
+                        {{ object.get('code_3').value }}
+                    </div>
+
+                    <div class="flex">
+                        <a *ngIf="claimService.hasPermission('countries.update') && !object.value._new" class="bttn" routerLink="/parameterization/country/city">{{ 'edit_cities' | translate }}</a>
+                    </div>
+
+                    <div *ngIf="object.value._new" class="new-mark"></div>
+                    <div *ngIf="!object.value._new && object.dirty" class="dirty-mark"></div>
+
+                </div>
+
+            </ng-container>
+
+        </div>
+
+    </div>
+
+    <div *ngIf="pagination.gettingMore" class="shimmer-container">
+        <div class="item-wrapper item-loader s-100">
+            <div class="content">
+                <div class="checkbox-space"></div>
+                <div class="text shimmer" style="width: 32px;height: 32px;margin-right: 8px;"></div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+                <div class="form-group s-flex">
+                    <div class="text shimmer"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,196 @@
+﻿@import '~@sersol/ngx/styles/mixins';
+
+app-profile,
+app-notifications {
+
+    .mat-tab-header {
+        display: none;
+    }
+
+    .mat-tab-group,
+    .mat-tab-body-wrapper {
+        height: 100%;
+    }
+
+    .container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+
+
+    }
+
+    .bttn.icon.close {
+        top: 10px;
+        left: -39px;
+        position: absolute;
+        background-color: red;
+        border-radius: 6px 0 0 6px;
+
+        mat-icon {
+            color: white;
+        }
+
+        &::before,
+        &::after {
+            content: "";
+            position: absolute;
+            top: 35px;
+            right: 0;
+            height: 40px;
+            width: 16px;
+            border-top-right-radius: 25px;
+            transition: all 200ms ease-in-out;
+            box-shadow: 0 -27px 0 0 red;
+            z-index: -1;
+        }
+
+        &::before {
+            box-shadow: 0 13px 0 0 red;
+            border-top-left-radius: 0;
+            border-bottom-right-radius: 25px;
+            top: -40px;
+            right: 0;
+        }
+    }
+
+    .title {
+        font-size: rem(12);
+        text-transform: uppercase;
+        padding: 24px;
+    }
+
+    .grid {
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 16px;
+        justify-content: center;
+
+        .item{
+            text-decoration: none;
+            color: inherit;
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+            cursor: pointer;
+            padding: 16px;
+
+            .name {
+                text-align: center;
+                padding: 0 8px;
+            }
+
+            .icon-container {
+                padding: 8px;
+                width: 55px;
+                min-width: 45px;
+                height: 55px;
+                min-height: 45px;
+                border-radius: 20px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                margin-bottom: 8px;
+                background-color: #f3f3f3;
+
+                mat-icon {
+                    height: 30px;
+                    width: 30px;
+                    color: white;
+                }
+
+                $alpha: 0.6;
+
+                &.red {
+                    background-color: rgba(#f58b99, $alpha);
+
+                    mat-icon {
+                        color: #f34455;
+                    }
+                }
+
+                &.orange {
+                    background-color: rgba(#fdb977, $alpha);
+
+                    mat-icon {
+                        color: #f88038;
+                    }
+                }
+
+                &.blue {
+                    background-color: rgba(#8dbff5, $alpha);
+
+                    mat-icon {
+                        color: #318ded;
+                    }
+                }
+
+                &.green {
+                    background-color: rgba(#6ff5bd, $alpha);
+
+                    mat-icon {
+                        color: #4eb987;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.scheme-dark {
+
+    app-profile {
+        .container {
+
+            .grid {
+
+                .item{
+
+                    .icon-container {
+                        background-color: #b9b9b9;
+
+                        mat-icon {
+                            color: #555;
+                        }
+
+                        $alpha: 0.9;
+
+                        &.red {
+                            background-color: rgba(#f58b99, $alpha);
+
+                            mat-icon {
+                                color: #f34455;
+                            }
+                        }
+
+                        &.orange {
+                            background-color: rgba(#fdb977, $alpha);
+
+                            mat-icon {
+                                color: #f88038;
+                            }
+                        }
+
+                        &.blue {
+                            background-color: rgba(#8dbff5, $alpha);
+
+                            mat-icon {
+                                color: #318ded;
+                            }
+                        }
+
+                        &.green {
+                            background-color: rgba(#6ff5bd, $alpha);
+
+                            mat-icon {
+                                color: #4eb987;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,25 @@
+@import "~@sersol/ngx/styles/mixins";
+@import '../../../../style/variables.scss';
+
+:host {
+    display: flex;
+
+    .img {
+        width: 100px;
+        height: 100px;
+        background-image: urlS3('assets/images/dialog/unsaved_xl.png');
+        background-repeat: no-repeat;
+        background-size: contain;
+        background-position: center;
+    }
+
+    .body {
+        .message {
+            padding: 24px;
+        }
+
+        .mat-dialog-actions {
+            justify-content: flex-end;
+        }
+    }
+}

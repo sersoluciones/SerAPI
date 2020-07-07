@@ -1,0 +1,11 @@
+<div *ngIf="claimService.hasPermission(permissions.update) && !(state.selectedObjects > 0)" class="action">
+    <button *ngIf="!state.formMode" type="button" class="bttn icon" (click)="toggleEditMode()" [disabled]="state.isSaving" [title]="'edit_list' | translate">
+        <mat-icon>edit</mat-icon>
+    </button>
+    <button *ngIf="state.formMode" type="button" class="bttn icon" (click)="toggleEditMode()" [disabled]="state.isSaving">
+        <mat-icon>undo</mat-icon>
+    </button>
+    <button *ngIf="state.formMode" type="button" class="bttn icon green" [disabled]="objectList.invalid || state.isSaving" (click)="save.emit()">
+        <mat-icon>save</mat-icon>
+    </button>
+</div>

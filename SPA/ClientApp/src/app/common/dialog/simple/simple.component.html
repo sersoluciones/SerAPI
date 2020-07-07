@@ -1,0 +1,4 @@
+<div class="message">{{ data.message | translate }}</div>
+<div *ngIf="closeButton" mat-dialog-actions>
+  <button class="bttn" (click)="close()">{{ 'close' | translate }}</button>
+</div>

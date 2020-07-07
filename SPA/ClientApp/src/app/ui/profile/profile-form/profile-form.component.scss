@@ -1,0 +1,12 @@
+:host {
+    form {
+        height: 100%;
+        display: flex;
+        padding: 0 24px 16px;
+        flex-direction: column;
+    }
+
+    .img-cropped-wrapper {
+        margin: 24px auto 32px;
+    }
+}

@@ -46,10 +46,10 @@ namespace SerAPI.Data
 
                 if (Constantes.SystemTables.Contains(entity.GetTableName()))
                 {
-                    // Replace table names
+                    // TODO: Replace table names
                     entity.SetTableName(entity.GetTableName().ToSnakeCase());
 
-                    // Replace column names            
+                    // TODO: Replace column names            
                     foreach (var property in entity.GetProperties())
                     {
                         property.SetColumnName(property.GetColumnName().ToSnakeCase());

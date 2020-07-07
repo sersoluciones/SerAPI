@@ -1,0 +1,184 @@
+<div class="wrapper">
+
+    <div class="tools">
+        <div *ngIf="!state.loading" class="controls">
+            <button type="button" class="bttn icon" [disabled]="modelForm.pristine || state.isSaving" (click)="undo()" [title]="'undo' | translate">
+                <mat-icon>undo</mat-icon>
+            </button>
+
+            <button type="submit" class="bttn icon green" [disabled]="modelForm.invalid || state.isSaving" (click)="submit()" [title]="'save' | translate">
+                <mat-icon style="color: green;">save</mat-icon>
+            </button>
+        </div>
+
+        <div class="message">{{ getMessage() | translate }}</div>
+
+        <window-controls [state]="state" [dialogRef]="dialogRef"></window-controls>
+    </div>
+
+    <form [formGroup]="modelForm">
+
+        <div class="s-flex main">
+            
+            <ng-content *ngIf="(state.loading || state.isSaving) then mainCP; else mainform"></ng-content>
+
+            <ng-template #mainCP>
+
+                <fieldset>
+
+                    <legend>{{'user_data' | translate}}</legend>
+
+                    <div class="row-wrap">
+
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+                        
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+        
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+        
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>{{'access_data' | translate}}</legend>
+
+                    <div class="row-wrap">
+
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+        
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>{{'platform' | translate}}</legend>
+
+                    <div class="row-wrap">
+
+                        <div class="form-group s-field">
+                            <div class="text shimmer"></div>
+                        </div>
+
+                    </div>
+
+                </fieldset>
+
+            </ng-template>
+
+            <ng-template #mainform>
+
+                <fieldset>
+
+                    <legend>{{'user_data' | translate}}</legend>
+
+                    <div class="row-wrap">
+
+                        <ser-form-element class="s-field">
+                            <label>{{ 'name' | translate }}</label>
+                            <input serControl formControlName="name" maxlength="150" />
+        
+                            <div serErrors="name">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+        
+                        <ser-form-element class="s-field">
+                            <label>{{ 'last_name' | translate }}</label>
+                            <input serControl formControlName="last_name" maxlength="150" />
+        
+                            <div serErrors="last_name">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+        
+                        <ser-form-element class="s-field">
+                            <label>{{ 'email' | translate }}</label>
+                            <input serControl formControlName="email" maxlength="150" />
+        
+                            <div serErrors="email">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                                <div serError="pattern">{{ 'email_error' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+        
+                        <ser-form-element class="s-field">
+                            <label>{{ 'phone' | translate }}</label>
+                            <input serControl formControlName="phone_number" maxlength="150" />
+        
+                            <div serErrors="phone_number">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>{{'access_data' | translate}}</legend>
+
+                    <div class="row-wrap">
+
+                        <ser-form-element class="s-field">
+                            <label>{{ 'password' | translate }}</label>
+                            <input type="password" serControl formControlName="password" maxlength="150" />
+        
+                            <div serErrors="password">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+        
+                        <ser-form-element class="s-field">
+                            <label>{{ 'confirm_password' | translate }}</label>
+                            <input type="password" serControl formControlName="confirm_password" maxlength="150" />
+        
+                            <div serErrors="confirm_password">
+                                <div serError="required">{{ 'required' | translate }}</div>
+                            </div>
+                        </ser-form-element>
+
+                    </div>
+
+                </fieldset>
+
+                <fieldset>
+
+                    <legend>{{'platform' | translate}}</legend>
+
+                    <div class="row-wrap">
+
+                        <select serControl formControlName="role" class="s-field">
+                            <option *ngFor="let role of roles" [value]="role.name"> {{ role.name }} </option>
+                        </select>
+
+                    </div>
+
+                </fieldset>
+
+            </ng-template>
+
+        </div>
+
+    </form>
+
+</div>

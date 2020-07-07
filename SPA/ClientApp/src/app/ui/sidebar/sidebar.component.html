@@ -1,0 +1,64 @@
+<div class="container">
+    <div class="logo">
+        <img class="color" [src]="aws.getS3Url('assets/images/logo_sidebar.svg')"/>
+        <img class="white" [src]="aws.getS3Url('assets/images/logo_sidebar_white.svg')"/>
+    </div>
+    <div class="navigation">
+        <ul>
+            <li class="menu">
+                <div class="icon-container">
+                    <mat-icon class="icon">home</mat-icon>
+                </div>
+                <div class="submenu">
+                    <div class="title">{{ 'home' | translate }}</div>
+                    <ul>
+                        <li><a routerLinkActive="active" routerLink="/order/main">{{ 'orders' | translate }}</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="menu" *ngIf="claimService.atLeastPermissions(['products.view', 'brands.view', 'categories.view', 'stores.view'])" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                <div class="icon-container">
+                    <mat-icon class="icon" svgIcon="ser:supplier"></mat-icon>
+                </div>
+                <div class="submenu">
+                    <div class="title">{{ 'inventory' | translate }}</div>
+                    <ul>
+                        <li *ngIf="claimService.hasPermission('products.view')"><a routerLinkActive="active" routerLink="/inventory/product">{{ 'products' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('brands.view')"><a routerLinkActive="active" routerLink="/inventory/brand">{{ 'brands' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('categories.view')"><a routerLinkActive="active" routerLink="/inventory/category">{{ 'categories' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('stores.view')"><a routerLinkActive="active" routerLink="/inventory/store">{{ 'stores' | translate }}</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="menu" *ngIf="claimService.atLeastPermissions(['references.view'])" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                <div class="icon-container">
+                    <mat-icon class="icon" svgIcon="ser:admin"></mat-icon>
+                </div>
+                <div class="submenu">
+                    <div class="title">{{ 'parameterization' | translate }}</div>
+                    <ul>
+                        <li *ngIf="claimService.hasPermission('commonoptions.view')"><a routerLinkActive="active" routerLink="/parameterization/common-option">{{ 'common_options' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('countries.view')"><a routerLinkActive="active" routerLink="/parameterization/country">{{ 'countries' | translate }}</a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="menu" *ngIf="claimService.atLeastPermissions(['audits.view', 'permissions.view', 'roles.view', 'swagger.view'])" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }">
+                <div class="icon-container">
+                    <mat-icon class="icon">security</mat-icon>
+                </div>
+                <div class="submenu">
+                    <div class="title">{{ 'security' | translate }}</div>
+                    <ul>
+                        <li *ngIf="claimService.hasPermission('companies.view')"><a routerLinkActive="active" routerLink="/security/company">{{ 'companies' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('users.view')"><a routerLinkActive="active" routerLink="/security/user">{{ 'users' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('roles.view')"><a routerLinkActive="active" routerLink="/security/role">{{ 'roles' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('permissions.view')"><a routerLinkActive="active" routerLink="/security/permission">{{ 'permissions' | translate }}</a></li>
+                        <li *ngIf="claimService.hasPermission('swagger.view')"><a href="/swagger/index.html" target="_blank">Swagger UI</a></li>
+                        <li *ngIf="claimService.hasPermission('playground.view')"><a href="/ui/playground" target="_blank">Playground GraphQL</a></li>
+                    </ul>
+                </div>
+            </li>
+            <div class="submenu-wrapper"></div>
+        </ul>
+    </div>
+</div>

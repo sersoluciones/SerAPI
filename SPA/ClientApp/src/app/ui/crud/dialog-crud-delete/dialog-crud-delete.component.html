@@ -1,0 +1,14 @@
+<div class="img"></div>
+<div class="content">
+    <div class="title">{{ 'delete_alert_multiple' | translate }}</div>
+    <div class="subtitle">({{ 'delete_warning' | translate }})</div>
+    <div class="message">
+        <ul>
+            <li *ngFor="let item of data">{{ item }}</li>
+        </ul>
+    </div>
+    <div mat-dialog-actions>
+    <button class="bttn" (click)="close()">{{ 'no_delete' | translate }}</button>
+    <button class="bttn red" (click)="close(true)">{{ 'yes_delete' | translate }}</button>
+    </div>
+</div>

@@ -1,0 +1,150 @@
+@import "~@sersol/ngx/styles/mixins";
+@import "../../../../../style/variables.scss";
+
+:host {
+
+    > .wrapper {
+
+        > form {
+            display: flex;
+            flex: 1;
+            flex-wrap: wrap;
+            padding: 24px;
+            height: calc(100% - 50px);
+
+            .main {
+                display: flex;
+
+                .name {
+                    font-size: rem(20);
+                    margin-top: 32px;
+                    width: 100%;
+                }
+            }
+
+            .editor-wrapper {
+                height: 100%;
+                padding: 0 32px 32px;
+
+                .editor {
+                    overflow: auto;
+                    display: flex;
+                    flex-wrap: wrap;
+                    align-content: flex-start;
+                    height: calc(100% - 38px);
+
+                    .permission-module {
+                        margin-left: 12px;
+                    }
+
+                    .container {
+                        padding: 8px;
+                        min-width: 200px;
+                        max-height: none;
+
+                        &.s-field {
+                            max-height: none;
+                        }
+
+                        .permissions {
+                            position: relative;
+                            margin-bottom: 8px;
+                            padding: 0 0 0 32px;
+
+                            .group-label,
+                            .perm-name {
+                                margin-right: 32px;
+                            }
+
+                            .connector-h {
+                                width: 33px;
+                                height: 2px;
+                                background-color: grey;
+                                position: absolute;
+                                top: 11px;
+                                left: 0;
+                            }
+
+                            .connector-v,
+                            .connector-vl {
+                                width: 2px;
+                                height: calc(100% + 8px);
+                                background-color: grey;
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                            }
+
+                            .connector-vl {
+                                height: 12px;
+                            }
+
+                            .perms {
+                                padding: 8px 0 8px 32px;
+
+                                .single-perm {
+                                    @include row;
+                                    @include start-center;
+                                    padding: 8px 0 8px 8px;
+                                    border-bottom: 1px solid #bbbbbb;
+
+                                    .switch {
+                                        margin-right: 32px;
+                                    }
+                                }
+                            }
+
+                        }
+
+                        > .permissions{
+                            padding: 8px;
+                            background-color: var(--light-grey-2dp);
+                            border-radius: 8px;
+
+                            .title{
+                                padding-right: 8px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    .text.shimmer {
+        margin-top: 32px;
+    }
+}
+
+.item-loader {
+
+    .content {
+
+        .card {
+            margin: 16px;
+            width: 200px;
+            height: 100px;
+            border-radius: 16px;
+        }
+    }
+}
+
+.role.box-crud {
+    > .permissions{
+        padding: 4px 0;
+    }
+
+    .permissions {
+        padding: 0 4px 0;
+
+        .connector-h {
+            width: 8px;
+        }
+    }
+}
+
+.scheme-dark {
+    .role .permissions .mat-icon {
+        color: white;
+    }
+}

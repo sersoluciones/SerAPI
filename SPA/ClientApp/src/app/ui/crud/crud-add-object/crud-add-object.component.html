@@ -1,0 +1,11 @@
+<div *ngIf="claimService.hasPermission(permissions.create) && !(state.selectedObjects > 0)">
+    <button type="button" class="bttn hide-on-mb" (click)="add.emit()" [disabled]="state.isSaving">
+        <mat-icon style="margin-right: 12px;">add</mat-icon>
+        {{ label | translate }}
+    </button>
+    <div class="show-on-mb">
+        <button type="button" class="bttn icon" (click)="add.emit()" [disabled]="state.isSaving">
+            <mat-icon>add</mat-icon>
+        </button>
+    </div>
+</div>

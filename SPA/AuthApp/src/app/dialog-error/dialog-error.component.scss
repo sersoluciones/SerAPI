@@ -1,0 +1,46 @@
+@import "~@sersol/ngx/styles/mixins";
+@import "../../style/variables.scss";
+
+.title-container {
+    display: flex;
+    justify-content: center;
+    font-size: rem(27);
+    color: red;
+}
+
+.dialog-content {
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        // flex-direction: column;
+
+        .image {
+            width: 120px;
+            height: 50px;
+            margin: 24px;
+            background-image: urlS3("assets/images/logo.svg");
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+        }
+        .sub-title {
+            font-size: rem(20);
+        }
+    }
+}
+
+.mat-dialog-actions {
+    display: flex;
+    flex-direction: row-reverse;
+
+    button {
+        background-color: #66ca80;
+        color: white;
+        font-weight: 300;
+        padding: 0px 20px;
+        height: 45px;
+        font-size: rem(12);
+        cursor: pointer;
+    }
+}

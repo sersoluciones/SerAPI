@@ -1,0 +1,57 @@
+<div class="crud-utils">
+    <div class="tools">
+        <div class="title">{{ 'roles' | translate }}</div>
+        <crud-toolbar [pagination]="pagination" [state]="state" [filters]="filters" [filterFG]="filterFG"></crud-toolbar>
+        <crud-add-object [permissions]="permissions" [state]="state" label="add_role"></crud-add-object>
+
+        <!--#region Delete All -->
+        <button *ngIf="state.selectedObjects > 0" type="button" class="bttn icon delete" (click)="delete($event)" [disabled]="state.isSaving">
+            <mat-icon>delete</mat-icon>
+        </button>
+        <!--#endregion -->
+
+        <crud-filter-tools [pagination]="pagination" [filters]="filters" [filterFG]="filterFG"></crud-filter-tools>
+    </div>
+</div>
+
+<div class="crud-grid-wrapper" whenScrolled>
+
+    <div name="ModelForm" class="item-grid-wrapper start-center s-field" *ngFor="let object of objectList">
+
+        <div class="content">
+
+                <mat-checkbox *ngIf="claimService.hasPermission('roles.delete') && !state.isSaving" [(ngModel)]="object._isSelected" (change)="toggleSelected()"></mat-checkbox>
+
+                <div *ngIf="state.isSaving || object._loading" class="row flex">
+                    <div class="checkbox-space"></div>
+                    <div class="text shimmer"></div>
+                </div>
+
+                <div *ngIf="!(state.isSaving || object._loading)" class="s-flex clickable" (click)="editObject(object)">{{ object.name }}</div>
+
+        </div>
+
+    </div>
+
+    <div *ngIf="pagination.gettingMore" class="shimmer-container" ng-animate="0">
+        <div class="item-grid-wrapper item-loader s-field">
+            <div class="content">
+                <div class="checkbox-space"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper item-loader s-field">
+            <div class="content">
+                <div class="checkbox-space"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+        <div class="item-grid-wrapper item-loader s-field">
+            <div class="content">
+                <div class="checkbox-space"></div>
+                <div class="text shimmer"></div>
+            </div>
+        </div>
+    </div>
+
+</div>

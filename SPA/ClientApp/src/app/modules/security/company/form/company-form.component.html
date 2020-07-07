@@ -1,0 +1,114 @@
+<div class="wrapper">
+
+    <div class="tools">
+        <div *ngIf="!state.loading" class="controls">
+            <button type="button" class="bttn icon" [disabled]="modelForm.pristine || state.isSaving" (click)="undo()" [title]="'undo' | translate">
+                <mat-icon>undo</mat-icon>
+            </button>
+
+            <button type="submit" class="bttn icon green" [disabled]="modelForm.invalid || state.isSaving" (click)="submit()" [title]="'save' | translate">
+                <mat-icon style="color: green;">save</mat-icon>
+            </button>
+        </div>
+
+        <div class="message">{{ getMessage() | translate }}</div>
+
+        <window-controls [state]="state" [dialogRef]="dialogRef"></window-controls>
+    </div>
+
+    <form [formGroup]="modelForm">
+
+        <div class="s-30 main">
+            <ng-content *ngIf="(state.loading || state.isSaving) then mainCP; else mainform"></ng-content>
+
+            <ng-template #mainCP>
+                <div class="text shimmer" style="height: 50px;"></div>
+                <div class="text shimmer" style="height: 192px;"></div>
+            </ng-template>
+
+            <ng-template #mainform>
+
+                <div #dropzone class="dropzone">
+                    <ngx-file-drop class="drop" [dropZoneLabel]="'select_image_dialog' | translate"
+                        (onFileDrop)="dropped($event)" (onFileOver)="fileOver($event)" (onFileLeave)="fileLeave($event)"
+                        [multiple]="false" [showBrowseBtn]="true" contentClassName="drop-content"
+                        browseBtnClassName="drop-button" browseBtnLabel="" accept="image/*">
+                    </ngx-file-drop>
+                </div>
+
+                <div class="container">
+
+                    <div>
+                        <div #photoBackground class="photo">
+                            <input type="file" id="photo-profile" accept="image/x-png,image/jpeg"
+                                (change)="viewFile($event)" [disabled]="state.loading || state.isSaving">
+                            <label class="select" for="photo-profile">
+                                <mat-icon>photo_camera</mat-icon>
+                            </label>
+                        </div>
+                        <em><small>{{ 'drag_your_photo_here' | translate}}</small></em>
+                    </div>
+    
+                    <ser-form-element>
+                        <label>{{ 'name' | translate }}</label>
+                        <input serControl formControlName="name" maxlength="150" />
+    
+                        <div serErrors="name">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+    
+                    <ser-form-element>
+                        <label>{{ 'last_name' | translate }}</label>
+                        <input serControl formControlName="last_name" maxlength="150" />
+                    </ser-form-element>
+    
+                    <select serControl formControlName="document_type_id">
+                        <option *ngFor="let documentType of optionsDocumentType" [value]="documentType.id"> {{ documentType.value }} </option>
+                    </select>
+    
+                    <ser-form-element>
+                        <label>{{ 'document_number' | translate }}</label>
+                        <input serControl formControlName="document_number" maxlength="150" />
+    
+                        <div serErrors="document_number">
+                            <div serError="required">{{ 'required' | translate }}</div>
+                        </div>
+                    </ser-form-element>
+    
+                    <div formGroupName="companies">
+    
+                        <ser-form-element>
+                            <label>{{ 'email' | translate }}</label>
+                            <input serControl formControlName="email" maxlength="150" />
+                        </ser-form-element>
+        
+                        <select serControl formControlName="type_company_id">
+                            <option *ngFor="let typeCompany of optionsTypeCompany" [value]="typeCompany.id"> {{ typeCompany.value }} </option>
+                        </select>
+        
+                        <ser-form-element>
+                            <label>{{ 'phone_number' | translate }}</label>
+                            <input serControl formControlName="phone_number" maxlength="150" />
+                        </ser-form-element>
+        
+                        <ser-form-element>
+                            <label>{{ 'contact_name' | translate }}</label>
+                            <input serControl formControlName="contact_name" maxlength="150" />
+                        </ser-form-element>
+        
+                        <select serControl formControlName="city_id">
+                            <option *ngFor="let city of optionsCity" [value]="city.id"> {{ city.name }} </option>
+                        </select>
+    
+                    </div>
+
+                </div>
+                
+            </ng-template>
+            
+        </div>
+
+    </form>
+
+</div>

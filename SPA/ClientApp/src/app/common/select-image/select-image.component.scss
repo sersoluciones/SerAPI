@@ -1,0 +1,21 @@
+@import "~@sersol/ngx/styles/mixins";
+
+.mat-dialog-actions {
+    display: flex;
+    flex-direction: row-reverse;
+
+    button {
+        background-color: #66ca80;
+        color: white;
+        font-weight: 300;
+        padding: 0px 20px;
+        height: 45px;
+        font-size: rem(12);
+        cursor: pointer;
+    }
+
+    .cancel-button {
+        background-color: red;
+        margin-right: 10px;
+    }
+}

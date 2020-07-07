@@ -1,0 +1,5 @@
+<div *ngIf="data.reject.status === 500" class="message">{{ 'server_error' | translate }}</div>
+<div *ngIf="data.reject.status !== 500" class="message" [innerHtml]="error_message"></div>
+<div *ngIf="closeButton" mat-dialog-actions>
+  <button class="bttn" (click)="close()">{{ 'close' | translate }}</button>
+</div>

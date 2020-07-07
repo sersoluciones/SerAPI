@@ -1,0 +1,19 @@
+
+@import "~@sersol/ngx/styles/mixins";
+@import "../../../../../style/variables.scss";
+
+:host {
+    form {
+        display: flex;
+        padding: 8px;
+
+        .fieldset {
+            margin-bottom: 12px;
+        }
+    }
+
+    .shimmer.text {
+        height: 50px;
+    }
+}
+

@@ -1,0 +1,10 @@
+:host {
+    .message {
+        padding: 24px;
+        color: red;
+    }
+
+    .mat-dialog-actions {
+        justify-content: flex-end;
+    }
+}

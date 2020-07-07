@@ -1,0 +1,121 @@
+<div class="flex row center-center">
+    <div class="form-wrapper">
+
+        <!-- <environment names="Development">
+            <div class="test-site">debug</div>
+        </environment>
+
+        <environment names="Staging">
+            <div class="test-site">test_site</div>
+        </environment> -->
+
+        <div class="bg1">
+            <div class="text">{{ 'slogan' | translate }}</div>
+        </div>
+
+        <div class="tabs-wrapper">
+
+            <div class="logo">
+                <button *ngIf="selectedIndex == 1" type="button" class="bttn icon" (click)="setTab(0)">
+                    <mat-icon>keyboard_backspace</mat-icon>
+                </button>
+                <div class="flex"></div>
+                <img [src]="aws.getS3Url('assets/images/logo.svg')" />
+            </div>
+
+            <mat-tab-group [(selectedIndex)]="selectedIndex">
+                <mat-tab label="Login">
+                    <form name="LoginForm" [formGroup]="loginForm" (ngSubmit)="normalSignIn()" role="form">
+
+                        <div class="new-user">
+                            <div >{{ 'new_user_label' | translate }} <a routerLink="/sign-up">{{ 'new_user_link' | translate }}</a></div>
+                        </div>
+
+                        <div *ngIf="loader" class="inputs">
+                            <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                            <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                            <div style="height: 24px;"></div>
+                        </div>
+
+                        <div *ngIf="!loader" class="inputs">
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="addon"><mat-icon>account_circle</mat-icon></span>
+                                    <input name="username" formControlName="username" autofocus required placeholder="{{'user' | translate}}">
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="addon"><mat-icon>vpn_key</mat-icon></span>
+                                    <input type="password" id="password" name="password" formControlName="password" required placeholder="{{'password' | translate}}">
+                                    <span class="addon" (click)="togglePassword()" title="{{ 'toggle_password_visibility' | translate }}"><mat-icon id="icon-password">visibility_off</mat-icon></span>
+                                </div>
+                            </div>
+
+                            <div class="remember-forgot">
+                                <mat-checkbox name="remember" formControlName="remember">{{'remember_me' | translate}}</mat-checkbox>
+                                <span (click)="setTab(1)">{{'forgot_password' | translate}}</span>
+                            </div>
+                        </div>
+
+                        <div ng-if="login_errors" class="error">{{ login_errors }}</div>
+
+                        <div class="sign-in">
+                            <button type="submit" class="bttn" [disabled]="loader">{{'login' | translate}}</button>
+                        </div>
+
+                        <div class="or">
+                            <hr>
+                            <div>{{ 'sign_in_external' | translate }}</div>
+                        </div>
+
+                        <div class="external-sign-in">
+                            <app-google></app-google>
+                            <app-microsoft></app-microsoft>
+                            <app-facebook></app-facebook>
+                        </div>
+
+                    </form>
+                </mat-tab>
+                <mat-tab label="Forgot">
+                    <form name="ForgotForm" [formGroup]="forgotForm" (ngSubmit)="forgot()">
+
+                        <div class="title">{{'forget_password_2' | translate}}</div>
+
+                        <div class="text">{{'forgot_password_help' | translate}}</div>
+
+                        <div *ngIf="loader" class="inputs">
+                            <div class="content-placeholder input" style="margin: 0 4px 30px;"></div>
+                        </div>
+
+                        <div *ngIf="!loader" class="inputs">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="addon"><i class="material-icons">mail</i></span>
+                                    <input type="email" name="email_username" formControlName="email_username" autofocus required>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div *ngIf="forgot_ok" class="success">{{ 'forgot_password_sended' | translate }}</div>
+                        <div *ngIf="forgot_errors" class="error">{{ 'forgot_password_error' | translate }}</div>
+
+                        <div class="sign-in">
+                            <button type="submit" class="bttn" [disabled]="loader">{{'send' | translate}}</button>
+                        </div>
+
+                    </form>
+                </mat-tab>
+            </mat-tab-group>
+        </div>
+
+    </div>
+</div>
+
+<div class="legal">
+    <a href="https://proggresi.com/politica-de-privacidad/" target="_blank">{{'privacy_policy' | translate}}</a>
+    <a href="https://proggresi.com/terminos-y-condiciones/" target="_blank">{{'terms_service' | translate}}</a>
+    <div>{{ 'all_rights_reserved' | translate:{'year':year} }}</div>
+</div>

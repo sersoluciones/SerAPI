@@ -1,0 +1,109 @@
+@import "~@sersol/ngx/styles/mixins";
+@import "../../../../../style/variables.scss";
+
+:host {
+
+    ::ng-deep .dropzone {
+        box-sizing: border-box;
+        display: none;
+        width: 100%;
+        z-index: 2;
+        position: absolute;
+        background-color: #6e6eff;
+        left: 0;
+        height: calc(100% - 18px);
+        color: black;
+
+        .ngx-file-drop__drop-zone {
+            position: relative;
+            cursor: pointer;
+            min-height: 200px;
+            height: 100%;
+            padding: 8px;
+            border: 4px dashed rgba(0, 0, 0, 0.55) !important;
+            border-radius: 6px !important;
+            box-sizing: border-box;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: vertical;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+            -webkit-box-direction: normal;
+            -webkit-box-pack: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+            -webkit-box-align: center;
+            -webkit-align-items: center;
+            -ms-grid-row-align: center;
+            align-items: center;
+            -webkit-align-content: center;
+            align-content: center;
+            max-width: 100%;
+        }
+
+        .drop-content {
+            text-align: center;
+            position: relative;
+            width: 100%;
+            height: 100%;
+
+            .ngx-file-drop__drop-zone-label {
+                text-transform: uppercase;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: rem(23);
+                height: 100%;
+            }
+
+            .drop-button {
+                width: 100%;
+                height: 100%;
+                background-color: transparent;
+            }
+        }
+    }
+
+    .photo {
+        width: 150px;
+        height: 150px;
+        border-radius: 50%;
+        background-image: urlS3(
+            "assets/images/account_circle.svg"
+        );
+        position: relative;
+        border: 1px solid #e1e5ef;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: cover;
+        margin: auto;
+
+        input {
+            opacity: 0;
+            z-index: 2;
+            position: absolute;
+            right: 0;
+            top: 0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+        }
+
+        .select {
+            position: absolute;
+            z-index: 1;
+            right: 0;
+            top: 0;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            border: none;
+            background-color: var(--light-grey-2dp);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}

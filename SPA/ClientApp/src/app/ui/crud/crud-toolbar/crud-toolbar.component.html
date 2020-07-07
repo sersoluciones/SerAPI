@@ -1,0 +1,52 @@
+<div class="search" [formGroup]="filterFG">
+    <mat-icon>search</mat-icon>
+    <input formControlName="all" [placeholder]="'search' | translate" [title]="'search_in_list' | translate" [disabled]="state.isSaving || pagination.showFilters" (keydown.enter)="list.emit()">
+</div>
+
+<div *ngIf="state.selectedObjects > 0; else rowcount" class="row-count" [innerHTML]="'selected_items_of' | translate: {selected: state.selectedObjects, count: pagination.rowCount}"></div>
+
+<ng-template #rowcount>
+    <div class="row-count">
+        <strong style="margin: 0 4px;">{{ 'total' | translate }}: </strong> {{ pagination.rowCount }}
+    </div>
+</ng-template>
+
+<div class="s-flex"></div>
+
+<button *ngIf="hasValue(filters)" type="button" [disabled]="state.isSaving" class="bttn icon s-auto" [title]="'open_search_tools' | translate" (click)="toggleFilters()" [class]="{pressed: pagination.showFilters}">
+    <i class="material-icons">
+        filter_list
+    </i>
+</button>
+<button *ngIf="hasValue(filters)" type="button" [disabled]="state.isSaving" class="bttn icon s-auto" [matMenuTriggerFor]="sortMenu" [title]="'order_list' | translate">
+    <mat-icon>sort</mat-icon>
+</button>
+
+<mat-menu #sortMenu="matMenu">
+    <div class="title">{{ 'order_list' | translate }}</div>
+    <button type="button" mat-menu-item *ngFor="let sort of filters" (click)="setSort(sort.field)">
+        <span *ngIf="pagination.sortType === sort.field">
+            <mat-icon *ngIf="pagination.sortReverse; else sortr">arrow_downward</mat-icon>
+            <ng-template #sortr>
+                <mat-icon>arrow_upward</mat-icon>
+            </ng-template>
+        </span>
+        <i [hidden]="pagination.sortType !== sort.field" style="width: 30px;"></i>
+        <span>{{ sort.label | translate }}</span>
+    </button>
+</mat-menu>
+
+<button *ngIf="!state.formMode && !(state.selectedObjects > 0)" type="button" class="bttn icon s-auto" [title]="'export' | translate" [matMenuTriggerFor]="downloadMenu">
+    <mat-icon>get_app</mat-icon>
+</button>
+
+<mat-menu #downloadMenu="matMenu">
+    <button type="button" mat-menu-item (click)="download.emit('xlsx')" class="crud-download-item" [disabled]="state.isDownloading">
+        <img [src]="aws.getS3Url('assets/icons/filetypes/x-office-spreadsheet.svg')" />
+        <span>Microsoft Excel</span>
+    </button>
+</mat-menu>
+
+<button type="button" *ngIf="!state.formMode && !state.selectedObjects" class="bttn icon s-auto" (click)="list.emit()" [title]="'update_list' | translate">
+    <i class="material-icons">refresh</i>
+</button>
