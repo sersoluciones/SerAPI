@@ -1,11 +1,14 @@
 ﻿using GraphQL.Builders;
 using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
+using SerAPI.Utilities;
 using SerAPI.Utils;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace SerAPI.GraphQl
@@ -14,8 +17,9 @@ namespace SerAPI.GraphQl
     {
         public static readonly string PermissionsKey = "Permissions";
 
-        public static string[] typesWithoutPermission = { "products", "stores",
-            "categories", "subcategories", "attachments" };
+        public static List<AdditionalPermission> additionalPermissions = null;
+
+        public static string[] typesWithoutPermission = { "categories", "subcategories" };
 
         public static string[] typesWithoutAuthentication = { "cities", "countries" };
 
@@ -42,6 +46,16 @@ namespace SerAPI.GraphQl
             return permissions.Any(x => string.Equals(x, permission));
         }
 
+        public static List<AdditionalPermission> GetOtherPermissions()
+        {
+            if (additionalPermissions == null)
+            {
+                var jsonString = File.ReadAllText("permissions.json");
+                additionalPermissions = JsonSerializer.Deserialize<List<AdditionalPermission>>(jsonString);
+            }
+            return additionalPermissions;
+        }
+
         public static void ValidatePermissions(this IProvideMetadata type, string permission, string friendlyTableName, string typeName)
         {
             if (!typesWithoutAuthentication.Contains(permission) &&
@@ -52,6 +66,9 @@ namespace SerAPI.GraphQl
                 if (!typesWithoutPermission.Contains(permission) &&
                 !typesWithoutPermission.Contains(friendlyTableName))
                 {
+                    var otherPerms = GetOtherPermissions().Where(x => x.Name == permission).SelectMany(x => x.Permissions).ToArray();
+                    type.RequirePermissions(otherPerms);
+
                     if (Constantes.SystemTablesSingular.Contains(typeName))
                         type.RequirePermissions($"{friendlyTableName}.view");
                     else
@@ -62,11 +79,11 @@ namespace SerAPI.GraphQl
 
         public static void RequirePermissions(this IProvideMetadata type, params string[] permissionsRequired)
         {
-            var permissions = type.GetMetadata<List<string>>(PermissionsKey);
+            var permissions = type.GetMetadata<HashSet<string>>(PermissionsKey);
 
             if (permissions == null)
             {
-                permissions = new List<string>();
+                permissions = new HashSet<string>();
                 type.Metadata[PermissionsKey] = permissions;
             }
 

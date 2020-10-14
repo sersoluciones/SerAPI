@@ -3,8 +3,6 @@ using GraphQL.Language.AST;
 using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
 using GraphQL.Validation;
-using IdentityModel;
-using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authorization.Infrastructure;
 using Microsoft.AspNetCore.Http;
@@ -20,9 +18,11 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using SerAPI.Utils;
 using SerAPI.Data;
 using System.Security.Claims;
+using SerAPI.Utilities;
+using static OpenIddict.Abstractions.OpenIddictConstants;
+using SerAPI.Utils;
 
 namespace SerAPI.GraphQl
 {
@@ -49,21 +49,21 @@ namespace SerAPI.GraphQl
             _config = config;
             _authorizationService = authorizationService;
             _httpContextAccessor = httpContextAccessor;
-            _logger = logger;            
+            _logger = logger;
         }
 
         public string GetCurrentUser()
         {
             return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x =>
-                x.Type == JwtClaimTypes.Subject).Value;
+                x.Type == Claims.Subject).Value;
         }
 
         public Task<INodeVisitor> ValidateAsync(ValidationContext context)
         {
             var userContext = context.UserContext as GraphQLUserContext;
-            var authenticated = userContext.User?.IsAuthenticated() ?? false;
+            var authenticated = userContext.User?.Identity.IsAuthenticated ?? false;
             var userRoles = userContext.User.Claims.Where(x =>
-                x.Type == JwtClaimTypes.Role).Select(x => x.Value).ToList();
+                x.Type == Claims.Role).Select(x => x.Value).ToList();
             var operationType = OperationType.Query;
             var nameField = "";
             return Task.FromResult(

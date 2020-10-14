@@ -16,7 +16,8 @@ namespace SerAPI.GraphQl
             else
             {
                 var index = 1;
-                do {
+                do
+                {
                     key = $"{key}_{index}";
                     index++;
                 } while (_extensionsDict.ContainsKey(key));

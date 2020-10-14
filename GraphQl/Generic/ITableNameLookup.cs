@@ -9,11 +9,15 @@ namespace SerAPI.GraphQl.Generic
     public interface ITableNameLookup
     {
         bool InsertKeyName(string friendlyName);
-        ObjectGraphType GetOrInsertGraphType(string key, ObjectGraphType objectGraphType);
+        dynamic GetOrInsertGraphType(string key, dynamic objectGraphType);
+        dynamic GetOrInsertInputGraphType(string key, dynamic objectGraphType);
         bool ExistGraphType(string key);
+        bool ExistInputGraphType(string key);
 
         ListGraphType<ObjectGraphType> GetOrInsertListGraphType(string key, ListGraphType<ObjectGraphType> objectGraphType);
+        ListGraphType<InputObjectGraphType> GetOrInsertInputListGraphType(string key, ListGraphType<InputObjectGraphType> objectGraphType);
         bool ExistListGraphType(string key);
+        bool ExistInputListGraphType(string key);
 
         string GetFriendlyName(string correctName);
     }
@@ -21,15 +25,22 @@ namespace SerAPI.GraphQl.Generic
     public class TableNameLookup : ITableNameLookup
     {
         private IDictionary<string, string> _lookupTable = new Dictionary<string, string>();
-        private IDictionary<string, ObjectGraphType> _graphTypeDict = new Dictionary<string, ObjectGraphType>();
+        private IDictionary<string, dynamic> _graphTypeDict = new Dictionary<string, dynamic>();
+        private IDictionary<string, dynamic> _inputGraphTypeDict = new Dictionary<string, dynamic>();
         private IDictionary<string, ListGraphType<ObjectGraphType>> _listGraphTypeDict = new Dictionary<string, ListGraphType<ObjectGraphType>>();
+        private IDictionary<string, ListGraphType<InputObjectGraphType>> _inputListGraphTypeDict = new Dictionary<string, ListGraphType<InputObjectGraphType>>();
 
         public bool ExistGraphType(string key)
         {
             return _graphTypeDict.ContainsKey(key);
         }
 
-        public ObjectGraphType GetOrInsertGraphType(string key, ObjectGraphType objectGraphType)
+        public bool ExistInputGraphType(string key)
+        {
+            return _inputGraphTypeDict.ContainsKey(key);
+        }
+
+        public dynamic GetOrInsertGraphType(string key, dynamic objectGraphType)
         {
             if (!_graphTypeDict.ContainsKey(key))
             {
@@ -39,11 +50,21 @@ namespace SerAPI.GraphQl.Generic
             return _graphTypeDict[key];
         }
 
+        public dynamic GetOrInsertInputGraphType(string key, dynamic objectGraphType)
+        {
+            if (!_inputGraphTypeDict.ContainsKey(key))
+            {
+                Console.WriteLine("Table agregada en diccionario cache: " + key);
+                _inputGraphTypeDict.Add(key, objectGraphType);
+            }
+            return _inputGraphTypeDict[key];
+        }
+
         public bool InsertKeyName(string correctName)
         {
             if (!_lookupTable.ContainsKey(correctName))
             {
-                var friendlyName = CanonicalName(correctName);
+                var friendlyName = StringExt.CanonicalName(correctName);
                 _lookupTable.Add(correctName, friendlyName);
                 return true;
             }
@@ -56,13 +77,7 @@ namespace SerAPI.GraphQl.Generic
                 throw new Exception($"Could not get {correctName} out of the list.");
             return value;
         }
-        public static string CanonicalName(string correctName)
-        {
-            var index = correctName.LastIndexOf("_");
-            var result = correctName.Substring(index + 1, correctName.Length - index - 1);
-            return char.ToLowerInvariant(result[0]) + result.Substring(1);
-        }
-
+        
         public ListGraphType<ObjectGraphType> GetOrInsertListGraphType(string key, ListGraphType<ObjectGraphType> objectGraphType)
         {
             if (!_listGraphTypeDict.ContainsKey(key))
@@ -76,6 +91,31 @@ namespace SerAPI.GraphQl.Generic
         public bool ExistListGraphType(string key)
         {
             return _listGraphTypeDict.ContainsKey(key);
+        }
+
+        public ListGraphType<InputObjectGraphType> GetOrInsertInputListGraphType(string key, ListGraphType<InputObjectGraphType> objectGraphType)
+        {
+            if (!_inputListGraphTypeDict.ContainsKey(key))
+            {
+                Console.WriteLine("Table agregada en diccionario lista cache: " + key);
+                _inputListGraphTypeDict.Add(key, objectGraphType);
+            }
+            return _inputListGraphTypeDict[key];
+        }
+
+        public bool ExistInputListGraphType(string key)
+        {
+            return _inputListGraphTypeDict.ContainsKey(key);
+        }
+    }
+
+    public static class StringExt
+    {
+        public static string CanonicalName(string correctName)
+        {
+            var index = correctName.LastIndexOf("_");
+            var result = correctName.Substring(index + 1, correctName.Length - index - 1);
+            return char.ToLowerInvariant(result[0]) + result.Substring(1);
         }
     }
 }

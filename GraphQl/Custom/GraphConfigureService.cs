@@ -1,4 +1,5 @@
-﻿using GraphQL.Server.Transports.AspNetCore;
+﻿using GraphQL.DataLoader;
+using GraphQL.Server.Transports.AspNetCore;
 using GraphQL.Types;
 using GraphQL.Validation;
 using Microsoft.AspNetCore.Builder;

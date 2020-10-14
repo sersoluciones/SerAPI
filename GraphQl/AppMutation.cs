@@ -4,6 +4,9 @@ using SerAPI.Models;
 using GraphQL.Server.Authorization.AspNetCore;
 using GraphQL.Types;
 using Microsoft.AspNetCore.Http;
+using System;
+using SerAPI.Utilities;
+using System.Linq;
 using SerAPI.Utils;
 
 namespace SerAPI.GraphQl
@@ -12,25 +15,36 @@ namespace SerAPI.GraphQl
     {
         private IDatabaseMetadata _dbMetadata;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private ITableNameLookup _tableNameLookup;
 
         public AppMutation(
-            IGraphRepository<Permission> permissionRepository,
             IDatabaseMetadata dbMetadata,
+             ITableNameLookup tableNameLookup,
             IHttpContextAccessor httpContextAccessor
             )
         {
             _dbMetadata = dbMetadata;
             _httpContextAccessor = httpContextAccessor;
+            _tableNameLookup = tableNameLookup;
 
             this.AuthorizeWith("Authorized");
 
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
+                if (Constantes.SystemTablesSingular.Contains(metaTable.Type.Name)) continue;
                 var type = metaTable.Type;
                 var friendlyTableName = type.Name.ToLower().ToSnakeCase();
 
-                var genericInputType = new GenericInputType(metaTable, _dbMetadata);               
-                var tableType = new GenericMutationType(metaTable);               
+                var genericInputType = new GenericInputType(metaTable, _dbMetadata, _tableNameLookup);
+                dynamic objectGraphType = null;
+                if (!_tableNameLookup.ExistGraphType(metaTable.Type.Name))
+                {
+                    var inherateType = typeof(TableType<>).MakeGenericType(new Type[] { metaTable.Type });
+                    objectGraphType = Activator.CreateInstance(inherateType, new object[] { metaTable,
+                        _dbMetadata, _tableNameLookup, _httpContextAccessor, false });
+                }
+
+                var tableType = _tableNameLookup.GetOrInsertGraphType(metaTable.Type.Name, objectGraphType);
 
                 AddField(new FieldType
                 {

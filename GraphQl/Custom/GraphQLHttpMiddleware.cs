@@ -21,6 +21,7 @@ using Microsoft.Extensions.Options;
 using GraphQL.Introspection;
 using GraphQL.Execution;
 using System.Text;
+using GraphQL.DataLoader;
 
 namespace SerAPI.GraphQl.Custom
 {
@@ -149,13 +150,13 @@ namespace SerAPI.GraphQl.Custom
                 : await userContextBuilder.BuildUserContext(context);
 
             var executer = context.RequestServices.GetRequiredService<IGraphQLExecuter<TSchema>>();
-            //var executer = context.RequestServices.GetRequiredService<IDocumentExecuter>();
+            // var executer = context.RequestServices.GetRequiredService<IDocumentExecuter>();
 
             // Normal execution with single graphql request
             if (bodyGQLBatchRequest == null)
             {
                 var stopwatch = ValueStopwatch.StartNew();
-                //var result = await ExecuteRequestAsync(schema, gqlRequest, context, executer, cancellationToken);
+                // var result = await ExecuteRequestAsync(schema, gqlRequest, context, executer, cancellationToken);
                 var result = await ExecuteRequestAsync(gqlRequest, userContext, executer, cancellationToken);
 
 
@@ -182,7 +183,7 @@ namespace SerAPI.GraphQl.Custom
                     var gqlRequestInBatch = bodyGQLBatchRequest[i];
 
                     var stopwatch = ValueStopwatch.StartNew();
-                    //var result = await ExecuteRequestAsync(schema, gqlRequestInBatch, context, executer, cancellationToken);
+                    // var result = await ExecuteRequestAsync(schema, gqlRequestInBatch, context, executer, cancellationToken);
                     var result = await ExecuteRequestAsync(gqlRequestInBatch, userContext, executer, cancellationToken);
 
                     await RequestExecutedAsync(new GraphQLRequestExecutionResult(gqlRequestInBatch, result, stopwatch.Elapsed, i));
@@ -235,10 +236,13 @@ namespace SerAPI.GraphQl.Custom
                 _.UnhandledExceptionDelegate = _options.UnhandledExceptionDelegate;
                 _.SchemaFilter = _options.SchemaFilter ?? new DefaultSchemaFilter();
                 _.CancellationToken = token;
+
                 foreach (var listener in _listeners)
                 {
                     _.Listeners.Add(listener);
                 }
+                var listenerData = context.RequestServices.GetRequiredService<DataLoaderDocumentListener>();
+                _.Listeners.Add(listenerData);
                 if (_settings.EnableMetrics)
                 {
                     _.FieldMiddleware.Use<InstrumentFieldsMiddleware>();

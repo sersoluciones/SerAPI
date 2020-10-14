@@ -14,6 +14,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using SerAPI.Data;
 using SerAPI.Utils;
+using SerAPI.Utilities;
+using System.Text.Json.Serialization;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SerAPI.Services
 {
@@ -43,17 +46,10 @@ namespace SerAPI.Services
             _cache = memoryCache;
         }
 
-        private string Filter<E>(out Dictionary<string, object> Params) where E : class
+        private string Filter<E>(out Dictionary<string, object> Params, string prefix) where E : class
         {
             var expresion = new StringBuilder();
             Params = new Dictionary<string, object>();
-
-            var currentClass = typeof(E).Name;
-            if (currentClass.Equals("ApplicationUser"))
-                currentClass = "user";
-            else if (currentClass.Equals("ApplicationRole"))
-                currentClass = "role";
-            string initialClass = currentClass.ToLower().First().ToString();
 
             // Filter By
             if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("filter_by")))
@@ -67,7 +63,9 @@ namespace SerAPI.Services
 
                 foreach (var propertyInfo in typeof(E).GetProperties())
                 {
-                    if (!propertyInfo.GetCustomAttributes(true).Any(x => x.ToString() == "System.Text.Json.Serialization.JsonIgnoreAttribute"))
+                    if (!propertyInfo.GetCustomAttributes(true).Any(x => x.GetType() == typeof(JsonIgnoreAttribute))
+                        && !propertyInfo.GetCustomAttributes(true).Any(x => x.GetType() == typeof(NotMappedAttribute))
+                        && !propertyInfo.PropertyType.Name.Contains("List"))
                         properties.Add(propertyInfo.Name, propertyInfo.PropertyType);
                 }
 
@@ -116,21 +114,22 @@ namespace SerAPI.Services
                     string[] value = Regex.Split(column, patternStr);
                     if (string.IsNullOrEmpty(value[1])) break;
 
-                    initialClass = currentClass.ToLower().First().ToString() + ".";
-                    if (!properties.Keys.Contains(value[0]) && value[0] != "$")
-                        initialClass = "";
+                    //initialClass = currentClass.ToLower().First().ToString() + ".";
+                    //if (!properties.Keys.Contains(value[0]) && value[0] != "$")
+                    //    initialClass = "";
 
-                    if (value[0] == "$")
+                    if (value[0] == "all")
                     {
+                        prefix += ".";
                         foreach (var (field, i) in properties.Select((v, i) => (v, i)))
                         {
-                            ConcatFilter(Params, expresion, string.Format("@P_{0}_", i + index), field.Key, value[1], column, initialClass,
+                            ConcatFilter<E>(Params, expresion, string.Format("@P_{0}_", i + index), field.Key, value[1], column, prefix,
                                 typeProperty: field.Value, index: i);
                         }
                         break;
                     }
                     var paramName = string.Format("@P_{0}_", index);
-                    ConcatFilter(Params, expresion, paramName, value[0], value[1], column, initialClass);
+                    ConcatFilter<E>(Params, expresion, paramName, value[0], value[1], column, "");
 
                 }
                 expresion.Append(")");
@@ -140,23 +139,40 @@ namespace SerAPI.Services
             return expresion.ToString();
         }
 
-        private void ConcatFilter(Dictionary<string, object> Params, StringBuilder expresion, string paramName,
+        private void ConcatFilter<E>(Dictionary<string, object> Params, StringBuilder expresion, string paramName,
             string key, string value, string column, string initialClass, Type typeProperty = null, int? index = null)
+             where E : class
         {
+            if (typeof(E).Name == "ApplicationUser" || typeof(E).Name == "ApplicationRole")
+            {
+                key = key.ToSnakeCase();
+            }
+
             var select = "";
             var enable = true;
             var patternStr = @"\=|¬";
+            Match matchStr = Regex.Match(column, patternStr);
+
             if (typeProperty != null && typeProperty == typeof(string))
             {
-                Params.Add(paramName, $"%{value.ToString()}%");
+                Params.Add(paramName, $"%{value}%");
                 select = string.Format("{0}{1} ilike {2}", initialClass, key, paramName);
+            }
+            else if (typeProperty != null && TypeExtensions.IsNumber(typeProperty))
+            {
+                Params.Add(paramName, $"%{value}%");
+                select = string.Format("{0}{1}::text ilike {2}", initialClass, key, paramName);
             }
             else
             {
-                if (int.TryParse(value, out int number))
+                if (value.ToLower().Trim() == "null")
                 {
-                    select = string.Format("{0}{1} = {2}", initialClass, key, paramName);
-                    Params.Add(paramName, number);
+                    select = string.Format("{0}{1} is NULL", initialClass, key);
+                    //Params.Add(paramName, "NULL");
+                }
+                else if (int.TryParse(value, out int number))
+                {
+                    select = AddParam(Params, paramName, key, initialClass, matchStr, number);
                 }
                 else if (float.TryParse(value, out float fnumber))
                 {
@@ -190,17 +206,30 @@ namespace SerAPI.Services
                         enable = false;
                     }
 
-                    Match matchStr = Regex.Match(column, patternStr);
                     if (matchStr.Success)
                     {
                         if (matchStr.Value == "=")
                         {
-                            Params.Add(paramName, value.ToString());
-                            select = string.Format("{0}{1} = {2}", initialClass, key, paramName);
+                            if (value.Contains(";"))
+                            {
+                                paramName = $"{key}s";
+
+                                var array = value.ToString().Split(";");
+                                var isNumber = true;
+                                foreach (var b in array.Select(x => int.TryParse(x, out int number))) if (!b) isNumber = false;
+                                if (isNumber) Params.Add(paramName, array.Select(int.Parse).ToArray());
+                                else Params.Add(paramName, array);
+                                select = string.Format("{0}{1}", initialClass, key) + " in ({" + paramName + "})";
+                            }
+                            else
+                            {
+                                Params.Add(paramName, value.ToString());
+                                select = string.Format("{0}{1} = {2}", initialClass, key, paramName);
+                            }
                         }
                         else
                         {
-                            Params.Add(paramName, $"%{value.ToString()}%");
+                            Params.Add(paramName, $"%{value}%");
                             select = string.Format("{0}{1} ilike {2}", initialClass, key, paramName);
                         }
                     }
@@ -216,31 +245,46 @@ namespace SerAPI.Services
 
         }
 
+        private string AddParam(Dictionary<string, object> Params, string paramName,
+            string key, string initialClass, Match matchStr, dynamic value)
+        {
+            string select = string.Format("{0}{1} = {2}", initialClass, key, paramName);
+            if (matchStr.Success && matchStr.Value == "¬")
+            {
+                select = string.Format("{0}{1}::text ilike {2}", initialClass, key, paramName);
+                Params.Add(paramName, $"%{value}%");
+            }
+            else
+            {
+                Params.Add(paramName, value);
+            }
+            return select;
+        }
+
         private string Pagination<E>(string query, out PagedResultBase result,
-           Dictionary<string, object> Params) where E : class
+            Dictionary<string, object> Params) where E : class
         {
             result = new PagedResultBase();
-            StringBuilder st = new StringBuilder();
-            var ParamsPagination = new Dictionary<string, object>();
-            int count = Params == null ? 0 : Params.Count;
-
-            // Pagination
-            if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("enable_pagination"))
-                && bool.TryParse(_contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("enable_pagination")).Value.ToString(),
-                   out bool enablePagination))
+            if (int.TryParse(_contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("page")).Value.ToString(), out int pageNumber))
             {
-                bool allowCache = true;
-                if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("filter_by")))
-                {
-                    var columnStr = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("filter_by")).Value.ToString();
-                    string[] columns = columnStr.Split(';');
-                    if (columns.Count() > 0) allowCache = false;
-                }
+                StringBuilder st = new StringBuilder();
+                var ParamsPagination = new Dictionary<string, object>();
+                int count = Params == null ? 0 : Params.Count;
 
-                var pageSizeRequest = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("page_size")).Value;
-                var currentPageRequest = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("current_page")).Value;
+                // Pagination
+
+                //bool allowCache = true;
+                //if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("filter_by")))
+                //{
+                //    var columnStr = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("filter_by")).Value.ToString();
+                //    string[] columns = columnStr.Split(';');
+                //    if (columns.Count() > 0) allowCache = false;
+                //}
+
+                var pageSizeRequest = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("take")).Value;
+                //var currentPageRequest = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("page")).Value;
                 int pageSize = string.IsNullOrEmpty(pageSizeRequest) ? 20 : int.Parse(pageSizeRequest);
-                int pageNumber = string.IsNullOrEmpty(currentPageRequest) ? 1 : int.Parse(currentPageRequest);
+                //int pageNumber = string.IsNullOrEmpty(currentPageRequest) ? 1 : int.Parse(currentPageRequest);
 
                 for (int i = 0; i < 2; i++)
                 {
@@ -264,8 +308,8 @@ namespace SerAPI.Services
                 result.page_size = pageSize;
 
                 int? rowCount = null;
-                if (allowCache && count == 0)
-                    rowCount = CacheGetOrCreate<E>();
+                //if (allowCache && count == 0)
+                //    rowCount = CacheGetOrCreate<E>();
 
                 result.row_count = rowCount ?? GetCountDBAsync(query, Params).Result;
 
@@ -277,11 +321,7 @@ namespace SerAPI.Services
 
                 return st.ToString();
             }
-            else
-            {
-                result = null;
-            }
-            return string.Empty;
+            else return string.Empty;
         }
 
         private int CacheGetOrCreate<E>()
@@ -351,41 +391,27 @@ namespace SerAPI.Services
         }
 
         public async Task<string> GetDataFromDBAsync<E>(string query, Dictionary<string, object> Params = null,
-           string OrderBy = "", string GroupBy = "", bool commit = false, bool jObject = false, bool json = true)
+           string OrderBy = "", string GroupBy = "", bool commit = false, bool jObject = false, bool json = true, string connection = null, string prefix = null)
             where E : class
         {
-            string SqlConnectionStr = _config.GetConnectionString("PsqlConnection");
+            string SqlConnectionStr = _config.GetConnectionString(connection ?? "PsqlConnection");
             StringBuilder sb = new StringBuilder();
             string Query = query;
             PagedResultBase pageResult = null;
 
             if (!commit)
             {
-                if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("select_args")))
-                {
-                    var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
-                    optionsBuilder.UseNpgsql(SqlConnectionStr, o => o.UseNetTopologySuite());
-                    optionsBuilder.EnableSensitiveDataLogging();
-                    optionsBuilder.UseLoggerFactory(MyLoggerFactory);
-
-                    using (var _context = new ApplicationDbContext(optionsBuilder.Options))
-                    {
-                        return JsonSerializer.Serialize(await _context.Set<E>().SortFilterAsync(_contextAccessor, pagination: true));
-                    }
-                }
-
-                Dictionary<string, object> ParamsRequest;
-                var clauseWhere = Filter<E>(out ParamsRequest);
+                var clauseWhere = Filter<E>(out Dictionary<string, object> ParamsRequest, prefix);
 
                 if (Params == null)
                 {
                     Params = new Dictionary<string, object>();
-                    if (ParamsRequest.Count > 0)
+                    if (!string.IsNullOrEmpty(clauseWhere))
                         Query = string.Format("{0}\nWHERE {1}", Query, clauseWhere);
                 }
                 else
                 {
-                    if (ParamsRequest.Count > 0)
+                    if (!string.IsNullOrEmpty(clauseWhere))
                         Query = string.Format("{0}\nAND ({1})", Query, clauseWhere);
                 }
 
@@ -400,16 +426,11 @@ namespace SerAPI.Services
                 // Order By
                 if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("order_by")))
                 {
-                    var currentClass = typeof(E).Name;
-                    if (currentClass.Equals("ApplicationUser"))
-                        currentClass = "user";
-                    else if (currentClass.Equals("ApplicationRole"))
-                        currentClass = "role";
-                    var initialClass = currentClass.ToLower().First();
+                    //var initialClass = currentClass.ToLower().First();
 
                     OrderBy = _contextAccessor.HttpContext.Request.Query.FirstOrDefault(x => x.Key.Equals("order_by")).Value.ToString();
                     string[] paramsOrderBy = OrderBy.Split(',');
-                    OrderBy = string.Join(", ", paramsOrderBy.Select(x => $"{initialClass}." + x.Trim()));
+                    OrderBy = string.Join(", ", paramsOrderBy.Select(x => $"{prefix}." + x.Trim()));
                 }
 
                 if (!string.IsNullOrEmpty(OrderBy))
@@ -418,17 +439,21 @@ namespace SerAPI.Services
                 }
 
                 // Pagination
-                var paginate = Pagination<E>(Query, out pageResult, Params);
-
-                if (!string.IsNullOrEmpty(paginate))
-                    Query = string.Format("{0}\n{1}", Query, paginate);
-
-                if (pageResult != null)
+                if (_contextAccessor.HttpContext.Request.Query.Any(x => x.Key.Equals("page")))
                 {
-                    sb.Append(JsonSerializer.Serialize(pageResult));
-                    sb.Replace("}", ",", sb.Length - 2, 2);
-                    sb.Append("\n\"results\": ");
+                    if (Params == null) Params = new Dictionary<string, object>();
+                    var paginate = Pagination<E>(Query, out pageResult, Params);
 
+                    if (!string.IsNullOrEmpty(paginate))
+                        Query = string.Format("{0}\n{1}", Query, paginate);
+
+                    if (pageResult != null)
+                    {
+                        sb.Append(JsonSerializer.Serialize(pageResult));
+                        sb.Replace("}", ",", sb.Length - 2, 2);
+                        sb.Append("\n\"results\": ");
+
+                    }
                 }
 
                 if (json)

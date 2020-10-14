@@ -1,5 +1,5 @@
 {
-	"all_rights_reserved": "© {{ year }} Proggresi. Todos los derechos reservados.",
+	"all_rights_reserved": "© {{ year }} SerAPI. Todos los derechos reservados.",
 	"forget_password_2": "Reestablecer mi contraseña",
 	"forgot_password": "Olvidé mi contraseña",
 	"forgot_password_error": "Parece que el correo que escribiste no esta registrado",
@@ -15,7 +15,7 @@
 	"send": "Enviar",
 	"terms_service": "Términos y Condiciones",
     "user": "Usuario",
-    "slogan": "Slogan proggresi",
+    "slogan": "Slogan SerAPI",
     "new_user_label": "¿Usuario nuevo?",
     "new_user_link": "Crea una cuenta",
 	"sign_in_external": "Ó continúa con tus cuentas personales",

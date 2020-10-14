@@ -6,6 +6,7 @@ using GraphQL.Types;
 using GraphQL.Validation;
 using Microsoft.AspNetCore.Http;
 using System;
+using SerAPI.Utilities;
 using SerAPI.Utils;
 
 namespace SerAPI.GraphQl.Generic
@@ -32,8 +33,8 @@ namespace SerAPI.GraphQl.Generic
             dynamic service = _httpContextAccessor.HttpContext.RequestServices.GetService(graphRepositoryType);
             var id = context.GetArgument<int?>("id");
             var deleteId = context.GetArgument<int?>($"{_type.Name.ToLower().ToSnakeCase()}Id");
-            var alias = context.FieldAst.Alias == "" ? context.FieldAst.Name : context.FieldAst.Alias;
-          
+            var alias = string.IsNullOrEmpty(context.FieldAst.Alias) ? context.FieldAst.Name : context.FieldAst.Alias;
+
             if (id.HasValue)
             {
                 var dbEntity = service.Update(id.Value, entity, alias);

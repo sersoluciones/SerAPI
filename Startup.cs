@@ -93,42 +93,8 @@ namespace SerAPI
             services.AddScoped<XlsxHelpers>();
 
             #region GraphQL
-            services.AddSingleton<IDocumentExecuter, DocumentExecuter>();
-            services.AddSingleton<ITableNameLookup, TableNameLookup>();
-            services.AddSingleton<TableMetadata>();
-            services.AddSingleton<IDatabaseMetadata, DatabaseMetadata>();
-
-            services.AddScoped<GraphQLQuery>();
-            services.AddScoped<FillDataExtensions>();
-            services.AddScoped<ISchema, AppSchema>();
-            services.AddScoped<IGraphRepository<Permission>, GenericGraphRepository<Permission>>();
-            services.AddScoped<IGraphRepository<CommonOption>, GenericGraphRepository<CommonOption>>();
-            services.AddScoped<IGraphRepository<ApplicationRole>, GenericGraphRepository<ApplicationRole>>();
-            services.AddScoped<IGraphRepository<ApplicationUser>, GenericGraphRepository<ApplicationUser>>();
-            services.AddScoped<IGraphRepository<ApplicationUserRole>, GenericGraphRepository<ApplicationUserRole>>();
-            services.AddScoped<IGraphRepository<Attachment>, GenericGraphRepository<Attachment>>();
-
-
-            services.AddTransient<IValidationRule, RequiresAuthValidationRule>();
-            //services.AddTransient<IValidationRule, AuthorizationValidationRule>();
-
-            services.AddHttpContextAccessor();
-
-            services
-                .AddGraphQL(o =>
-                {
-                    o.ExposeExceptions = false; // CurrentEnvironment.IsDevelopment();
-                    o.EnableMetrics = false; // CurrentEnvironment.IsDevelopment();
-                    o.UnhandledExceptionDelegate = ctx => Console.WriteLine("error: " + ctx.OriginalException.Message);
-                })
-                .AddGraphTypes(ServiceLifetime.Scoped)
-                .AddSystemTextJson(deserializerSettings => { }, serializerSettings => { })
-                .AddGraphQLAuthorization(options =>
-                {
-                    options.AddPolicy("Authorized", x => x.RequireAuthenticatedUser());
-                })
-                .AddUserContextBuilder(httpContext => new GraphQLUserContext { User = httpContext.User })
-                .AddDataLoader();
+            services.AddConfigGraphQl();
+            services.AddScopedModelsDynamic();
 
             #endregion
 

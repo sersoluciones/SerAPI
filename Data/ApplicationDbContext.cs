@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SerAPI.Utils;
 using SerAPI.Models;
+using SerAPI.Utilities;
 
 namespace SerAPI.Data
 {
@@ -29,6 +30,9 @@ namespace SerAPI.Data
         public DbSet<Attachment> attachments { get; set; }
         public DbSet<CommonOption> common_options { get; set; }
         public DbSet<Permission> permissions { get; set; }
+
+        public DbSet<City> cities { get; set; }
+        public DbSet<Country> countries { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

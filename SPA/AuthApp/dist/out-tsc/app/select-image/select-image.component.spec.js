@@ -1,0 +1,21 @@
+import { async, TestBed } from '@angular/core/testing';
+import { SelectImageComponent } from './select-image.component';
+describe('SelectImageComponent', () => {
+    let component;
+    let fixture;
+    beforeEach(async(() => {
+        TestBed.configureTestingModule({
+            declarations: [SelectImageComponent]
+        })
+            .compileComponents();
+    }));
+    beforeEach(() => {
+        fixture = TestBed.createComponent(SelectImageComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
+});
+//# sourceMappingURL=select-image.component.spec.js.map

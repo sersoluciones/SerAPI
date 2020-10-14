@@ -4,7 +4,10 @@ using GraphQL.Types;
 using Humanizer;
 using Microsoft.AspNetCore.Http;
 using System.Linq;
-using SerAPI.Utils;
+using System;
+using System.Reflection;
+using SerAPI.Utilities;
+using GraphQL.DataLoader;
 
 namespace SerAPI.GraphQl.Generic
 {
@@ -15,13 +18,15 @@ namespace SerAPI.GraphQl.Generic
         private ApplicationDbContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly FillDataExtensions _fillDataExtensions;
+        private readonly IDataLoaderContextAccessor _accessor;
 
         public GraphQLQuery(
             ApplicationDbContext dbContext,
             IDatabaseMetadata dbMetadata,
             ITableNameLookup tableNameLookup,
             IHttpContextAccessor httpContextAccessor,
-            FillDataExtensions fillDataExtensions
+            FillDataExtensions fillDataExtensions,
+            IDataLoaderContextAccessor accessor
             )
         {
             _dbMetadata = dbMetadata;
@@ -29,21 +34,33 @@ namespace SerAPI.GraphQl.Generic
             _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
             _fillDataExtensions = fillDataExtensions;
+            _accessor = accessor;
 
             Name = "Query";
-           
+
             foreach (var metaTable in _dbMetadata.GetTableMetadatas())
             {
                 //var friendlyTableName = _tableNameLookup.GetFriendlyName(metaTable.TableName);
                 var friendlyTableName = metaTable.Type.Name.ToSnakeCase().ToLower();
 
-                ObjectGraphType objectGraphType = null;
+                dynamic objectGraphType = null;
                 if (!_tableNameLookup.ExistGraphType(metaTable.Type.Name))
                 {
-                    objectGraphType = new TableType(metaTable, _dbMetadata, _tableNameLookup, _httpContextAccessor);
+                    var inherateType = typeof(TableType<>).MakeGenericType(new Type[] { metaTable.Type });
+                    objectGraphType = Activator.CreateInstance(inherateType, new object[] { metaTable,
+                        _dbMetadata, _tableNameLookup, _httpContextAccessor, _accessor, false  });
                 }
 
                 var tableType = _tableNameLookup.GetOrInsertGraphType(metaTable.Type.Name, objectGraphType);
+
+                dynamic objectCountGraphType = null;
+                if (!_tableNameLookup.ExistGraphType($"{metaTable.Type.Name}_count"))
+                {
+                    var inherateType = typeof(CountTableType<>).MakeGenericType(new Type[] { metaTable.Type });
+                    objectCountGraphType = Activator.CreateInstance(inherateType, new object[] { _dbMetadata, metaTable, _tableNameLookup });
+                }
+
+                var countTableType = _tableNameLookup.GetOrInsertGraphType($"{metaTable.Type.Name}_count", objectCountGraphType);
 
                 AddField(new FieldType
                 {
@@ -51,7 +68,7 @@ namespace SerAPI.GraphQl.Generic
                     Type = tableType.GetType(),
                     ResolvedType = tableType,
                     Resolver = new MyFieldResolver(metaTable, _dbContext, _fillDataExtensions, _httpContextAccessor),
-                    Arguments = new QueryArguments((tableType as TableType).TableArgs)
+                    Arguments = new QueryArguments(tableType.TableArgs)
                 });
 
                 var listType = new ListGraphType<ObjectGraphType<dynamic>>();
@@ -63,7 +80,16 @@ namespace SerAPI.GraphQl.Generic
                     Type = listType.GetType(),
                     ResolvedType = listType,
                     Resolver = new MyFieldResolver(metaTable, _dbContext, _fillDataExtensions, _httpContextAccessor),
-                    Arguments = new QueryArguments((tableType as TableType).TableArgs)
+                    Arguments = new QueryArguments(tableType.TableArgs)
+                });
+
+                AddField(new FieldType
+                {
+                    Name = $"{friendlyTableName.Pluralize()}_count",
+                    Type = countTableType.GetType(),
+                    ResolvedType = countTableType,
+                    Resolver = new MyFieldResolver(metaTable, _dbContext, _fillDataExtensions, _httpContextAccessor),
+                    Arguments = new QueryArguments(countTableType.TableArgs)
                 });
             }
         }

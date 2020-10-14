@@ -13,6 +13,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Humanizer;
+using SerAPI.Utilities;
 using SerAPI.Utils;
 
 namespace SerAPI.GraphQl.Generic
@@ -20,14 +21,14 @@ namespace SerAPI.GraphQl.Generic
     public static class DbContextExtensions
     {
         public static IQueryable Query(this DbContext context, string entityName) =>
-            context.Query(context.Model.FindEntityType(entityName).ClrType); 
+            context.Query(context.Model.FindEntityType(entityName).ClrType);
 
-        static readonly MethodInfo SetMethod = typeof(DbContext).GetMethod(nameof(DbContext.Set)); 
+        static readonly MethodInfo SetMethod = typeof(DbContext).GetMethod(nameof(DbContext.Set));
 
         public static IQueryable Query(this DbContext context, Type entityType) =>
-            (IQueryable)SetMethod.MakeGenericMethod(entityType).Invoke(context, null);      
+            (IQueryable)SetMethod.MakeGenericMethod(entityType).Invoke(context, null);
 
-        public static async Task<IEnumerable<T>> GetPagedAsync<T>(this IQueryable<T> source, IHttpContextAccessor _httpContextAccessor, 
+        public static async Task<IEnumerable<T>> GetPagedAsync<T>(this IQueryable<T> source, IHttpContextAccessor _httpContextAccessor,
             FillDataExtensions _fillDataExtensions) where T : class
         {
             bool allowCache = true;

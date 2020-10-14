@@ -11,6 +11,5 @@ namespace SerAPI.GraphQl.Generic
         public string TableName { get; set; }
         public string AssemblyFullName { get; set; }
         public IEnumerable<ColumnMetadata> Columns { get; set; }
-        public IEnumerable<ColumnMetadata> TableColumns { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using GraphQL.Types;
 using Humanizer;
 using Newtonsoft.Json;
+using SerAPI.Utilities;
 using SerAPI.Utils;
 using System;
 
@@ -19,7 +20,7 @@ namespace SerAPI.GraphQl.Generic
             this.RequirePermissions($"{permission}.add", $"{permission}.update", $"{permission}.delete");
 
             Name = metaTable.Type.Name;
-            foreach (var tableColumn in metaTable.TableColumns)
+            foreach (var tableColumn in metaTable.Columns)
             {
                 InitGraphTableColumn(metaTable.Type, tableColumn);
             }
@@ -35,8 +36,10 @@ namespace SerAPI.GraphQl.Generic
                 Field(
                     typeof(string).GetGraphTypeFromType(true),
                     columnMetadata.ColumnName,
-                    resolve: context => {
+                    resolve: context =>
+                    {
                         dynamic point = context.Source.GetPropertyValue(columnMetadata.ColumnName);
+                        if (point == null) return null;
                         return JsonExtensions.SerializeWithGeoJson(point, formatting: Formatting.None);
                     }
                 );
@@ -44,20 +47,12 @@ namespace SerAPI.GraphQl.Generic
             }
             else
             {
-                var graphQLType = (ResolveColumnMetaType(columnMetadata.DataType)).GetGraphTypeFromType(true);
-
                 Field(
-                    graphQLType,
+                    GraphUtils.ResolveGraphType(columnMetadata.Type),
                     columnMetadata.ColumnName
                 );
             }
         }
 
-        private Type ResolveColumnMetaType(string dbType)
-        {
-            if (TableType.DatabaseTypeToSystemType.ContainsKey(dbType))
-                return TableType.DatabaseTypeToSystemType[dbType];
-            return typeof(string);
-        }
     }
 }

@@ -3,6 +3,7 @@ using GraphQL.Resolvers;
 using GraphQL.Types;
 using NetTopologySuite.Geometries;
 using Newtonsoft.Json;
+using SerAPI.Utilities;
 using SerAPI.Utils;
 using System;
 

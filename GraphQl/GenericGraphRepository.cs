@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using IdentityModel;
+
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.Text;
@@ -14,13 +14,17 @@ using System.Linq.Dynamic.Core;
 using GraphQL.Types;
 using GraphQL.DataLoader;
 using GraphQL;
-using GraphQL.Language.AST;
-using Humanizer;
 using SerAPI.Data;
 using SerAPI.Models;
 using Microsoft.EntityFrameworkCore.DynamicLinq;
-using System.Text.RegularExpressions;
 using System.ComponentModel.DataAnnotations;
+using SerAPI.Utilities;
+using SerAPI.GraphQl.Generic;
+using SerAPI.Managers;
+using System.Linq.Expressions;
+using System.Reflection;
+using System.ComponentModel.DataAnnotations.Schema;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 using SerAPI.Utils;
 
 namespace SerAPI.GraphQl
@@ -37,6 +41,13 @@ namespace SerAPI.GraphQl
         private readonly ILogger _logger;
         public string model;
         public string nameModel;
+        public static readonly ILoggerFactory MyLoggerFactory = LoggerFactory.Create(builder =>
+        {
+            builder
+                .AddFilter((category, level) => category == DbLoggerCategory.Database.Command.Name
+                        && level == LogLevel.Information)
+                .AddConsole();
+        });
 
         public GenericGraphRepository(ApplicationDbContext db,
             IHttpContextAccessor httpContextAccessor,
@@ -65,29 +76,29 @@ namespace SerAPI.GraphQl
         public string GetCurrentUser()
         {
             return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x =>
-                x.Type == JwtClaimTypes.Subject)?.Value;
+                x.Type == Claims.Subject)?.Value;
         }
 
         public string GetCurrenUserName()
         {
-            return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == JwtClaimTypes.Name)?.Value;
+            return _httpContextAccessor.HttpContext.User.Claims.FirstOrDefault(x => x.Type == Claims.Name)?.Value;
         }
 
         public List<string> GetRolesUser()
         {
             return _httpContextAccessor.HttpContext.User.Claims.Where(x =>
-                x.Type == JwtClaimTypes.Role).Select(x => x.Value).ToList();
+                x.Type == Claims.Role).Select(x => x.Value).ToList();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync(List<string> includeExpressions = null,
+        public async Task<IEnumerable<T>> GetAllAsync(string alias, List<string> includeExpressions = null,
             string orderBy = "", string whereArgs = "", int? take = null, int? offset = null, params object[] args)
         {
-            return await GetQuery(includeExpressions: includeExpressions, orderBy: orderBy,
+            return await GetQuery(alias, includeExpressions: includeExpressions, orderBy: orderBy,
                 first: take, offset: offset, whereArgs: whereArgs, args: args)
                 .AsNoTracking().ToListAsync();
         }
 
-        public IQueryable<T> GetQuery(List<string> includeExpressions = null,
+        public IQueryable<T> GetQuery(string alias, List<string> includeExpressions = null,
             string orderBy = "", string whereArgs = "", int? first = null, int? offset = null, params object[] args)
         {
             IQueryable<T> query = GetModel;
@@ -100,7 +111,7 @@ namespace SerAPI.GraphQl
             if (!string.IsNullOrEmpty(whereArgs) && args.Length > 0)
                 query = query.Where(whereArgs, args);
 
-            query = FilterQueryByCompany(query);
+            query = FilterQueryByCompany(query, out _);
 
             if (!string.IsNullOrEmpty(orderBy))
                 query = query.OrderBy(orderBy);
@@ -122,7 +133,7 @@ namespace SerAPI.GraphQl
                 var pageCount = (double)result.row_count / first.Value;
                 result.page_count = (int)Math.Ceiling(pageCount);
 
-                _fillDataExtensions.Add($"{typeof(T).Name.ToSnakeCase().ToLower().Pluralize()}_list", result);
+                _fillDataExtensions.Add(alias, result);
                 query = query.Skip((offset.Value - 1) * first.Value);
             }
             if (first != null)
@@ -133,16 +144,78 @@ namespace SerAPI.GraphQl
             return query;
         }
 
-        private IQueryable<T> FilterQueryByCompany(IQueryable<T> query)
+        public int GetCountQuery(List<string> includeExpressions = null,
+           string whereArgs = "", params object[] args)
         {
-            foreach (var (propertyInfo, j) in typeof(T).GetProperties().Select((v, j) => (v, j)))
+            IQueryable<T> query = GetModel;
+
+            if (includeExpressions != null && includeExpressions.Count > 0)
             {
-                if (propertyInfo.Name == "company_id")
+                foreach (var include in includeExpressions)
+                    query = query.Include(include);
+            }
+            if (!string.IsNullOrEmpty(whereArgs) && args.Length > 0)
+                query = query.Where(whereArgs, args);
+            query = FilterQueryByCompany(query, out _);
+            return query.Count();
+        }
+
+        private IQueryable<T> FilterQueryByCompany(IQueryable<T> query, out bool find, Type parentType = null, string columnName = "")
+        {
+            find = false;
+            string companyId = null;
+            var types = new Dictionary<string, Type>();
+            var typeToEvaluate = typeof(T);
+            if (parentType != null) typeToEvaluate = parentType;
+
+            //Console.WriteLine($"Name {_httpContextAccessor.HttpContext.User.Identity.Name} IsAuthenticated {_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated}");
+            foreach (var propertyInfo in typeToEvaluate.GetProperties())
+            {
+                var field = propertyInfo.PropertyType;
+                if (field.IsGenericType && field.GetGenericTypeDefinition() == typeof(Nullable<>))
                 {
-                    query = query.Where($"company_id  = @0", GetCompanyIdUser());
+                    field = field.GetGenericArguments()[0];
+                }
+                var childType = field ?? propertyInfo.GetType();
+                var attrName = "";
+                foreach (ForeignKeyAttribute attr in propertyInfo.GetCustomAttributes(true).Where(x => x.GetType() == typeof(ForeignKeyAttribute)))
+                {
+                    attrName = attr.Name;
+                }
+
+                if (attrName != "" && typeToEvaluate.GetProperties().SingleOrDefault(x => x.Name == attrName).GetCustomAttributes(true).Any(x => x.GetType() == typeof(RequiredAttribute)))
+                    if (Assembly.GetCallingAssembly().GetTypes()
+                        .Where(x => !x.IsAbstract && typeof(BasicModel).IsAssignableFrom(x)).Any(x => x == childType)
+                            || Constantes.SystemTablesSingular.Contains(childType.Name))
+                    {
+                        types.Add(propertyInfo.Name, childType);
+                    }
+
+
+                if (propertyInfo.Name == "company_id" || propertyInfo.Name == "CompanyId")
+                {
+                    find = true;
+                    if (_httpContextAccessor.HttpContext.User.Identity.IsAuthenticated && !string.IsNullOrEmpty(_httpContextAccessor.HttpContext.User.Identity.Name))
+                        companyId = GetCompanyIdUser();
+                    else
+                        companyId = _httpContextAccessor.HttpContext.Session?.GetInt32("company_id")?.ToString();
+
+                    if (propertyInfo.Name == "CompanyId") query = query.Where($"{columnName}CompanyId  = @0 OR {columnName}CompanyId  == null", companyId);
+                    else query = query.Where($"{columnName}company_id  = @0 OR {columnName}company_id  == null", companyId);
                     break;
                 }
             }
+
+            if (!find)
+            {
+                foreach (var dict in types.OrderByDescending(x => x.Key))
+                {
+                    //_logger.LogWarning($"---------------dict: {dict.Key}");
+                    query = FilterQueryByCompany(query, out bool finded, dict.Value, $"{dict.Key}.");
+                    if (finded) break;
+                }
+            }
+
             return query;
         }
 
@@ -152,250 +225,73 @@ namespace SerAPI.GraphQl
         {
             var whereArgs = new StringBuilder();
             var args = new List<object>();
-            if (isString) whereArgs.Append($"@0.Contains({param})");
-            else
-                whereArgs.Append($"@0.Contains(int({param}))");
-            args.Add(ids);
             var orderBy = context.GetArgument<string>("orderBy");
 
-            if (context.Arguments != null)
+            string SqlConnectionStr = _config.GetConnectionString("PsqlConnection");
+            var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
+            optionsBuilder.UseNpgsql(SqlConnectionStr, o => o.UseNetTopologySuite());
+            optionsBuilder.EnableSensitiveDataLogging();
+            optionsBuilder.UseLoggerFactory(MyLoggerFactory);
+
+            using (var _db = new ApplicationDbContext(optionsBuilder.Options))
             {
-                var i = 1;
-                foreach (var argument in context.Arguments)
+                IQueryable<T> query = _db.Set<T>();
+
+                List<string> includeExpressions = new List<string>();
+                GraphUtils.DetectChild(context.FieldAst.SelectionSet.Selections, includeExpressions,
+                       ((dynamic)context.FieldDefinition.ResolvedType).ResolvedType, args, whereArgs,
+                       arguments: context.Arguments, mainType: typeof(T));
+
+                if (whereArgs.Length > 0)
+                    whereArgs.Append(" and ");
+
+                if (isString) whereArgs.Append($"@{args.Count}.Contains({param})");
+                else
+                    whereArgs.Append($"@{args.Count}.Contains(int({param}))");
+                args.Add(ids);
+
+                if (includeExpressions != null && includeExpressions.Count > 0)
                 {
-                    if (new string[] { "orderBy", "first", "join" }.Contains(argument.Key)) continue;
-                    whereArgs.Append(" AND ");
-                    if (argument.Key == "all")
-                    {
-                        Utils.Utils.FilterAllFields(typeof(T), args, whereArgs, i, argument.Value.ToString());
-                    }
-                    else
-                    {
-
-                        Type fieldType = null;
-                        var patternStr = @"_iext";
-                        Match matchStr = Regex.Match(argument.Key, patternStr);
-                        if (matchStr.Success)
-                        {
-                            var fieldName = Regex.Replace(argument.Key, patternStr, "");
-                            foreach (var (propertyInfo, j) in typeof(T).GetProperties().Select((v, j) => (v, j)))
-                            {
-                                if (propertyInfo.Name == fieldName)
-                                {
-                                    fieldType = propertyInfo.PropertyType;
-                                    if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                                    {
-                                        fieldType = fieldType.GetGenericArguments()[0];
-                                    }
-                                    break;
-                                }
-                            }
-                            //_logger.LogWarning($"type {typeof(T).Name} argument: {argument.Key} fieldName {fieldName} fieldType {fieldType}");
-
-                        }
-
-                        Utils.Utils.ConcatFilter(args, whereArgs, i, argument.Key, argument.Value, type: fieldType);
-                        i++;
-                    }
+                    foreach (var include in includeExpressions)
+                        query = query.Include(include);
                 }
+
+                _logger.LogWarning($"whereArgs: {whereArgs}");
+                query = query.Where(whereArgs.ToString(), args.ToArray());
+
+                query = FilterQueryByCompany(query, out _);
+
+                if (!string.IsNullOrEmpty(orderBy))
+                    query = query.OrderBy(orderBy);
+
+                var items = await query.AsNoTracking().ToListAsync();
+                var pi = typeof(T).GetProperty(param);
+                //if (typeof(Tkey) == typeof(int))
+                return items.ToLookup(x => (Tkey)pi.GetValue(x, null));
             }
-
-            IQueryable<T> query = GetModel;
-
-            foreach (var selection in context.FieldAst.SelectionSet.Selections)
-            {
-                if (((Field)selection).SelectionSet.Selections.Count > 0)
-                {
-                    var model = ((Field)selection).Name;
-                    if (model == "role") model = "Role";
-                    if (model == "user") model = "User";
-
-                    if ((((Field)selection).Name.Pluralize(inputIsKnownToBeSingular: false)) == model)
-                    {
-                        _logger.LogInformation($"model {model} is plural");
-                        if (((Field)selection).Arguments != null && ((Field)selection).Arguments.Count() > 0)
-                        {
-                            var i = 0;
-                            foreach (var argument in ((Field)selection).Arguments)
-                            {
-                                if (new string[] { "orderBy", "first", "join" }.Contains(argument.Name)) continue;
-                                if (whereArgs.Length > 0) whereArgs.Append(" AND ");
-                                if (argument.Name == "all")
-                                {
-                                    Type modelType = null;
-                                    foreach (var entityType in _context.Model.GetEntityTypes())
-                                    {
-                                        modelType = Type.GetType(entityType.Name);
-                                        if (modelType == null) continue;
-                                        if (modelType.Name.ToSnakeCase().ToLower().Pluralize() == model)
-                                            break;
-                                    }
-                                    Utils.Utils.FilterAllFields(modelType, args, whereArgs, args.Count() + i, argument.Value.Value.ToString(),
-                                        isList: true, parentModel: model);
-                                }
-                                else
-                                {
-                                    Type fieldType = null;
-                                    var patternStr = @"_iext";
-                                    Match matchStr = Regex.Match(argument.Name, patternStr);
-                                    if (matchStr.Success)
-                                    {
-                                        var fieldName = Regex.Replace(argument.Name, patternStr, "");
-
-                                        Type modelType = null;
-                                        foreach (var entityType in _context.Model.GetEntityTypes())
-                                        {
-                                            modelType = Type.GetType(entityType.Name);
-                                            if (modelType == null) continue;
-                                            if (modelType.Name.ToSnakeCase().ToLower().Pluralize() == model)
-                                                break;
-                                        }
-
-                                        foreach (var (propertyInfo, j) in modelType.GetProperties().Select((v, j) => (v, j)))
-                                        {
-                                            if (propertyInfo.Name == fieldName)
-                                            {
-                                                fieldType = propertyInfo.PropertyType;
-                                                if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                                                {
-                                                    fieldType = fieldType.GetGenericArguments()[0];
-                                                }
-                                                break;
-                                            }
-                                        }
-                                        //_logger.LogWarning($"model {model} modelType {modelType} argument: {argument.Name} fieldName {fieldName} fieldType {fieldType}");
-
-                                    }
-
-                                    Utils.Utils.ConcatFilter(args, whereArgs, args.Count + i, $"{model}.Any({argument.Name}", argument.Value.Value, isList: true, type: fieldType);
-                                    i++;
-                                }
-                            }
-
-                        }
-                    }
-                    else
-                    {
-                        if (((Field)selection).Arguments != null)
-                        {
-                            var i = 0;
-                            foreach (var argument in ((Field)selection).Arguments)
-                            {
-                                whereArgs.Append(" AND ");
-                                if (argument.Name == "all")
-                                {
-                                    Type modelType = null;
-                                    foreach (var entityType in _context.Model.GetEntityTypes())
-                                    {
-                                        modelType = Type.GetType(entityType.Name);
-                                        if (modelType == null) continue;
-                                        if (modelType.Name.ToSnakeCase().ToLower() == model)
-                                            break;
-                                    }
-                                    Utils.Utils.FilterAllFields(modelType, args, whereArgs, args.Count() + i, argument.Value.Value.ToString(), parentModel: model);
-                                }
-                                else
-                                {
-                                    Type fieldType = null;
-                                    var patternStr = @"_iext";
-                                    Match matchStr = Regex.Match(argument.Name, patternStr);
-                                    if (matchStr.Success)
-                                    {
-                                        var fieldName = Regex.Replace(argument.Name, patternStr, "");
-
-                                        Type modelType = null;
-                                        foreach (var entityType in _context.Model.GetEntityTypes())
-                                        {
-                                            modelType = Type.GetType(entityType.Name);
-                                            if (modelType == null) continue;
-                                            if (modelType.Name.ToSnakeCase().ToLower() == model)
-                                                break;
-                                        }
-
-                                        foreach (var (propertyInfo, j) in modelType.GetProperties().Select((v, j) => (v, j)))
-                                        {
-                                            if (propertyInfo.Name == fieldName)
-                                            {
-                                                fieldType = propertyInfo.PropertyType;
-                                                if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(Nullable<>))
-                                                {
-                                                    fieldType = fieldType.GetGenericArguments()[0];
-                                                }
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    Utils.Utils.ConcatFilter(args, whereArgs, args.Count() + i, $"{model}.{argument.Name}", argument.Value.Value, type: fieldType);
-                                    i++;
-                                }
-                            }
-                        }
-                    }
-                    //if (!_context.ChangeTracker.Entries().Select(x => x.Entity).Any(x => Type.GetType(x.ToString()).Name.ToLower() == model))
-                    query = query.Include(model);
-                }
-            }
-            _logger.LogWarning($"whereArgs: {whereArgs}");
-            query = query.Where(whereArgs.ToString(), args.ToArray());
-
-            query = FilterQueryByCompany(query);
-
-            if (!string.IsNullOrEmpty(orderBy))
-                query = query.OrderBy(orderBy);
-
-            var items = await query.AsNoTracking().ToListAsync();
-            var pi = typeof(T).GetProperty(param);
-            //if (typeof(Tkey) == typeof(int))
-            return items.ToLookup(x => (Tkey)pi.GetValue(x, null));
         }
 
-        public Task<IEnumerable<T>> GetLoader(IResolveFieldContext context, string param)
-        {
-            var first = context.GetArgument<int?>("first");
-            Task<IEnumerable<T>> res = null;
-            try
-            {
-                //if (Assembly.GetCallingAssembly().GetTypes()
-                //    .Where(x => !x.IsAbstract && typeof(BasicModel).IsAssignableFrom(x)).Any(x => x == context.Source.GetType()))
-                //IEquatable
-                if (context.Source is BasicModel)
-                {
-                    var accesor = _httpContextAccessor.HttpContext.RequestServices.GetService<IDataLoaderContextAccessor>();
-                    var loader = accesor.Context.GetOrAddCollectionBatchLoader<int, T>($"GetItemsByIds",
-                       (ids) => GetItemsByIds(ids, context, param));
 
-                    res = loader.LoadAsync(((BasicModel)context.Source).id);
-
-                }
-                else // if (context.Source is ApplicationUser || context.Source is ApplicationRole)
-                {
-                    var loader = _dataLoader.Context.GetOrAddCollectionBatchLoader<string, T>($"GetItemsByIds",
-                        (ids) => GetItemsByIds(ids, context, param, isString: true));
-                    res = loader.LoadAsync(((ApplicationUser)context.Source).Id);
-                }
-
-                if (first.HasValue && first.Value > 0)
-                {
-                    return res?.ContinueWith(x => x.Result.Take(first.Value));
-                }
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e.ToString());
-            }
-            return res;
-        }
-
-        public async Task<T> GetByIdAsync(int id, List<string> includeExpressions = null,
+        public async Task<T> GetByIdAsync(string alias, int id, List<string> includeExpressions = null,
           string whereArgs = "", params object[] args)
         {
             if (id == 0) return null;
-            var entity = await GetQuery(includeExpressions: includeExpressions,
+            var entity = await GetQuery(alias, includeExpressions: includeExpressions,
                 first: 1, whereArgs: whereArgs, args: args)
                 .AsNoTracking().FirstOrDefaultAsync();
 
             //var entity = await GetModel.FindAsync(id);
+            if (entity == null) return null;
+            return entity;
+        }
+
+        public async Task<T> GetByIdAsync(string alias, string id, List<string> includeExpressions = null,
+         string whereArgs = "", params object[] args)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            var entity = await GetQuery(alias, includeExpressions: includeExpressions,
+                first: 1, whereArgs: whereArgs, args: args)
+                .AsNoTracking().FirstOrDefaultAsync();
             if (entity == null) return null;
             return entity;
         }
@@ -415,6 +311,16 @@ namespace SerAPI.GraphQl
             nameModel = $"create_{nameModel}";
             try
             {
+                foreach (var propertyInfo in typeof(T).GetProperties())
+                {
+                    try
+                    {
+                        var newValue = propertyInfo.GetValue(entity);
+                        if (propertyInfo.Name == "created_by") newValue = GetCompanyIdUser();
+                    }
+                    catch (Exception) { }
+                }
+
                 var obj = _context.Add(entity);
                 _context.SaveChanges();
                 return obj.Entity;
@@ -456,6 +362,14 @@ namespace SerAPI.GraphQl
                             if (newValue == null && oldValue != null) continue;
                             //if (newValue == oldValue) continue;
 
+                            Type type = null;
+                            var isList = propertyInfo.PropertyType.Name.Contains("List");
+                            if (isList)
+                                type = propertyInfo.PropertyType.GetGenericArguments().Count() > 0 ?
+                                    propertyInfo.PropertyType.GetGenericArguments()[0] : propertyInfo.PropertyType;
+                            if (isList && type.BaseType == typeof(object) && newValue != null)
+                                DeleteRelationsM2M(type, id);
+
                             //Console.WriteLine($"___________TRACEEEEEEEEEEEEEEEEE____________: key: {propertyInfo.Name} {oldValue} {newValue}");
                             var currentpropertyInfo = obj.GetType().GetProperty(propertyInfo.Name);
                             if (currentpropertyInfo != null)
@@ -488,6 +402,73 @@ namespace SerAPI.GraphQl
             return obj;
         }
 
+        private void DeleteRelationsM2M(Type type, int parentId)
+        {
+            try
+            {
+                GetType()
+                    .GetMethod("DeleteRelations")
+                    .MakeGenericMethod(type)
+                    .Invoke(this, parameters: new object[] { parentId });
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"ERROR {e.ToString()} type {nameof(type)} parentId {parentId}");
+            }
+        }
+
+        public void DeleteRelations<M>(int parentId) where M : class
+        {
+            var iQueryable = _context.Set<M>();
+            var keyProperty = typeof(M).GetProperties();
+            var paramFK = "";
+            foreach (var prop in typeof(M).GetProperties())
+            {
+                var field = prop.PropertyType;
+                if (field.IsGenericType && field.GetGenericTypeDefinition() == typeof(Nullable<>))
+                {
+                    field = field.GetGenericArguments()[0];
+                }
+
+                if (field == typeof(T))
+                {
+                    paramFK = prop.GetCustomAttributes(true)
+                        .Where(x => x.GetType() == typeof(ForeignKeyAttribute))
+                        .Select(attr => ((ForeignKeyAttribute)attr).Name)
+                        .FirstOrDefault();
+                    break;
+                }
+            }
+            //var paramToEvaluate = typeof(M).GetProperties().FirstOrDefault(x => x.PropertyType.Name == paramFK).PropertyType;
+            //if (paramToEvaluate.IsGenericType && paramToEvaluate.GetGenericTypeDefinition() == typeof(Nullable<>))
+            //{
+            //    paramToEvaluate = paramToEvaluate.GetGenericArguments()[0];
+            //    paramFK = paramToEvaluate.Name;
+            //}
+            if (!string.IsNullOrEmpty(paramFK))
+            {
+                var expToEvaluate = EqualPredicate<M>(typeof(M), paramFK, parentId);
+                iQueryable.RemoveRange(iQueryable.Where(expToEvaluate));
+                _context.SaveChanges();
+                //_context.tax_products.RemoveRange(_context.tax_products.Where(x => x.product_id.Value == 2));
+            }
+        }
+
+        private Expression<Func<M, bool>> EqualPredicate<M>(Type type, string propertyName, object value) where M : class
+        {
+            var parameter = Expression.Parameter(type, "x");
+            // x => x.id == value
+            //     |___|
+            var property = Expression.Property(parameter, propertyName);
+            // x => x.id == value
+            //             |__|
+            var numberValue = Expression.Constant(value);
+            // x => x.id == value
+            //|________________|
+            var exp = Expression.Equal(property, numberValue);
+            return Expression.Lambda<Func<M, bool>>(exp, parameter);
+        }
+
         public T Delete(int id, string alias = "")
         {
             var obj = GetModel.Find(id);
@@ -516,6 +497,26 @@ namespace SerAPI.GraphQl
                 _cache.Remove(cacheKeySize);
             }
             return obj;
+        }
+
+        public async Task<bool> ValidateObj(BaseValidationModel model)
+        {
+            var expToEvaluate = DynamicExpressionParser.ParseLambda<T, bool>(new ParsingConfig(), true, $"{model.Field}.ToLower() = @0", $"{model.Value.ToLower()}");
+            bool exist;
+            if (!string.IsNullOrEmpty(model.Id))
+            {
+                var expToExcept = DynamicExpressionParser.ParseLambda<T, bool>(new ParsingConfig(), true, $"id != @0", model.Id);
+                if (int.TryParse(model.Id, out int res))
+                {
+                    expToExcept = DynamicExpressionParser.ParseLambda<T, bool>(new ParsingConfig(), true, $"id != @0", res);
+                }
+                exist = GetModel.Where("@0(it) and @1(it)", expToEvaluate, expToExcept).Count() > 0;
+            }
+            else
+            {
+                exist = await GetModel.AnyAsync(expToEvaluate);
+            }
+            return exist;
         }
 
         #region utilities
