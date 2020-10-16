@@ -117,7 +117,7 @@ namespace SerAPI
 
             };
 
-            var scope = context.RequestedResources.Resources.IdentityResources;
+            var scope = context.RequestedResources.IdentityResources;
             if (scope.Any(x => x.Name == JwtClaimTypes.Profile))
             {
                 claims.AddRange(new[]

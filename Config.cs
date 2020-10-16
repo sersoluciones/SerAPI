@@ -19,6 +19,19 @@ namespace SerAPI
                     Description = "Ser API",  // TODO: Replace                   
                       // include the following using claims in access token (in addition to subject id)
                     //UserClaims = { JwtClaimTypes.Name, JwtClaimTypes.Email, JwtClaimTypes.Role },
+                    Scopes =
+                    {
+                         new Scope()
+                        {
+                            Name = "ser_api.full_access",
+                            DisplayName = "Full access to Proggresi API",
+                        },
+                        new Scope
+                        {
+                            Name = "ser_api.read_only",
+                            DisplayName = "Read only access to Proggresi API"
+                        }
+                    },
 
                 }//"api1",        
               };
@@ -31,7 +44,7 @@ namespace SerAPI
                 //////////////////////////////////////////
                  new Client
                 {
-                    ClientId = "third_Ser_client", // TODO: Replace
+                    ClientId = "third_ser_client", // TODO: Replace
                     // secret for authentication
                     ClientSecrets =
                     {
@@ -64,11 +77,11 @@ namespace SerAPI
                 //////////////////////////////////////////
                 new Client
                 {
-                    ClientId = "Ser_client", // TODO: Replace
+                    ClientId = "ser_client", // TODO: Replace
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256()) // TODO: Fill
+                        new Secret("esto es una clave secreta".Sha256()) // TODO: Fill
                     },
                     IncludeJwtId = false,
                     AlwaysIncludeUserClaimsInIdToken = false,
@@ -94,19 +107,21 @@ namespace SerAPI
 
                 new Client
                 {
-                    ClientId = "crendentials_Ser_client", // TODO: Replace
+                    ClientId = "crendentials_ser_client", // TODO: Replace
                     // secret for authentication
                     ClientSecrets =
                     {
-                        new Secret("XXXXX-XXXXX-XXXX-XXXX".Sha256()) // TODO: Fill
+                        new Secret("esto es una clave secreta".Sha256()) // TODO: Fill
                     },
 
                     AccessTokenLifetime = 120,
                      // no interactive user, use the clientid/secret for authentication
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+                     // scopes that client has access to
                     AllowedScopes =
                     {
-                        "ser_api.read_only" // TODO: Replace
+                        "roles" // TODO: Replace
                     }
                 },
             };

@@ -86,6 +86,8 @@ namespace SerAPI
             services.AddScoped<IRepository<CommonOption>, GenericModelFactory<CommonOption>>();
             services.AddScoped<IRepository<Attachment>, AttachmentManager>();
 
+            services.AddScoped<IRepository<Car>, GenericModelFactory<Car>>();
+
             services.AddScoped<IViewRenderService, ViewRenderService>();
             services.AddScoped<Locales>();
             services.AddScoped<AuthMessageSender>();
@@ -190,7 +192,7 @@ namespace SerAPI
                 options.Authority = Configuration.GetSection("IdentityServer")["Authority"];
                 options.SupportedTokens = SupportedTokens.Jwt;
                 options.RequireHttpsMetadata = false; // Note: Set to true in production
-                options.ApiName = "SerAPI_api"; // TODO: Fill
+                options.ApiName = "ser_api"; // TODO: Fill
             });
 
             services.Configure<IdentityOptions>(options =>
@@ -265,7 +267,7 @@ namespace SerAPI
                 .AddDataAnnotationsLocalization()
                 .AddViewLocalization(options => options.ResourcesPath = "Resources");
 
-            services.AddRazorPages();
+            //services.AddRazorPages();
 
             #endregion
         }
@@ -308,11 +310,8 @@ namespace SerAPI
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute(
-                    name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                endpoints.MapControllers();
                 endpoints.MapRazorPages();
-
                 // Signal R
                 endpoints.MapHub<StateHub>("/hub");
             });

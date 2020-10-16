@@ -33,6 +33,8 @@ namespace SerAPI.Data
 
         public DbSet<City> cities { get; set; }
         public DbSet<Country> countries { get; set; }
+        public DbSet<Car> cars { get; set; }
+        //public DbSet<Brand> brands { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
